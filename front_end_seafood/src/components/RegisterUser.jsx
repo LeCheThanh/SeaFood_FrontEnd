@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import userService from '../service/userApiService.js';
+import UserService from '../service/UserApiService';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast styles
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -22,7 +22,7 @@ const Register = () => {
     e.preventDefault();
 
     // Gửi yêu cầu đăng ký lên server
-    userService.register(formData)
+    UserService.register(formData)
       .then((response) => {
         // Xử lý phản hồi thành công từ server
         setMessage(response.data);
