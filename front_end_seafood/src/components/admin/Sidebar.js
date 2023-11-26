@@ -1,5 +1,6 @@
 import React from 'react'
 import './style.css'
+import { Link } from "react-router-dom";
 function Sidebar() {
   return (
     <div className='bg-white sidebar'>
@@ -17,10 +18,19 @@ function Sidebar() {
                 <i className='bi bi-house fs-5 me-3'></i>
                 <span>Home</span>
             </a>
+            <Link className='list-group-item list-group-item py-2' to='/admin/index'>
+                <i className='bi bi-speedometer2 fs-5 me-3'></i>
+                <span>Dashboard</span>
+            </Link>
+        
             <a className='list-group-item list-group-item py-2'>
-                <i className='bi bi-table fs-5 me-3'></i>
+             <i className='bi bi-table fs-5 me-3'></i>
                 <span>Products</span>
             </a>
+            <Link className='list-group-item list-group-item py-2' to='/admin/product'>
+                <i className='bi bi-table fs-5 me-3'></i>
+                <span>Products</span>
+            </Link>
             <a className='list-group-item list-group-item py-2'>
                 <i className='bi bi-list-ul fs-5 me-3'></i>
                 <span>Categories</span>

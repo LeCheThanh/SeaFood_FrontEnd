@@ -50,7 +50,7 @@ function Dashboard() {
             console.log(error);
           });
       }, []);
-      const [orderLatest, setOrderLatest] = useState(null);
+      const [orderLatest, setOrderLatest] = useState([]);
       useEffect(()=>{
         AdminApiService.getLatestOrder()
         .then(response => {
@@ -59,6 +59,12 @@ function Dashboard() {
         })
         .catch(error => console.log(error));
       },[])
+
+    const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+    const [ordersPerPage] = useState(10); // Số lượng đơn hàng trên mỗi trang
+    const indexOfLastOrder = currentPage * ordersPerPage;
+    const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+    const currentOrders = orderLatest.slice(indexOfFirstOrder, indexOfLastOrder);
 
   return (
     <div className='container-fluid bg-secondary min-vh-100'>
@@ -110,45 +116,72 @@ function Dashboard() {
                             </div>
                         </div>
                     </div>
-                    {orderLatest && orderLatest.length > 0 ?(
-                    <table className='table caption-top bg-white rounded mt-2'>
-                        <caption className='text-white fs-4'>
-                            Recent Orders
-                        </caption>
-                       
-                        <thead>
-                            <tr>
-                            <th scope="col">Code</th>
-                            <th scope="col">Email khách hàng</th>
-                            <th scope="col">Tên người nhận</th>
-                            <th scope="col">Số điện thoại</th>
-                            <th scope="col">Địa chỉ</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col">Phương thức thanh toán</th>
-                            <th scope="col">Tổng tiền</th>
-                            </tr>
-                        </thead>
-                        {orderLatest.map((order) => (
-                        <tbody key={order.id}>
-                            <tr >
-                            <th scope="row">{order.code}</th>
-                            <td>{order.receiverEmail}</td>
-                            <td>{order.receiverName}</td>
-                            <td>{order.receiverPhone}</td>
-                            <td>{order.receiverAddress}</td>
-                            <td>
-                            {order.orderState.map((state) => (
-                            <span key={state.id}>{state.state}</span>))}
-                             </td>
-                            <td>{order.payment}</td>
-                            <td>{formatCurrency(order.finalPrice,'VND')}</td>
-                            </tr>
-                        </tbody>
-                        ))}
-                        </table>
-                        )
-                        :(<p>Loading.....</p>)
-                        }
+                    {orderLatest && orderLatest.length > 0 ? (
+                        <div>
+                            <table className='table caption-top bg-white rounded mt-2'>
+                            <caption className='text-white fs-4'>Recent Orders</caption>
+                            <thead>
+                                <tr>
+                                <th scope="col">Code</th>
+                                <th scope="col">Email khách hàng</th>
+                                <th scope="col">Tên người nhận</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Địa chỉ</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Phương thức thanh toán</th>
+                                <th scope="col">Tổng tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentOrders.map((order) => (
+                                <tr key={order.id}>
+                                    <th scope="row">{order.code}</th>
+                                    <td>{order.receiverEmail}</td>
+                                    <td>{order.receiverName}</td>
+                                    <td>{order.receiverPhone}</td>
+                                    <td>{order.receiverAddress}</td>
+                                    <td>
+                                    {order.orderState.map((state) => (
+                                        <span key={state.id}>{state.state}</span>
+                                    ))}
+                                    </td>
+                                    <td>{order.payment}</td>
+                                    <td>{formatCurrency(order.finalPrice, 'VND')}</td>
+                                </tr>
+                                ))}
+                            </tbody>
+                            </table>
+
+                            {/* Hiển thị nút Previous */}
+                            <button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            >
+                            Previous
+                            </button>
+
+                            {/* Hiển thị số trang */}
+                            {Array.from({ length: Math.ceil(orderLatest.length / ordersPerPage) }).map((_, index) => (
+                            <button
+                                key={index}
+                                onClick={() => setCurrentPage(index + 1)}
+                                disabled={currentPage === index + 1}
+                            >
+                                {index + 1}
+                            </button>
+                            ))}
+
+                            {/* Hiển thị nút Next */}
+                            <button
+                            onClick={() => setCurrentPage(currentPage + 1)}
+                            disabled={currentPage === Math.ceil(orderLatest.length / ordersPerPage)}
+                            >
+                            Next
+                            </button>
+                        </div>
+                        ) : (
+                        <p>Loading.....</p>
+                        )}
                 </div>
             </div>
         </div>
