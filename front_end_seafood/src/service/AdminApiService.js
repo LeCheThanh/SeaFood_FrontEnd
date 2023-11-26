@@ -9,9 +9,6 @@ class AdminApiService{
     countOrder(){
         return axios.get(EMLOYEE_API_BASE_URL+'/order/count')
     }
-    countProduct(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/product/count')
-    }
     countOrderShipping(){
         return axios.get(EMLOYEE_API_BASE_URL+'/order/count/shippingstate')
     }
@@ -26,6 +23,21 @@ class AdminApiService{
             }
         });
     }
+    //Product
+    countProduct(){
+        return axios.get(EMLOYEE_API_BASE_URL+'/product/count')
+    }
+    getAllProduct(){
+        return axios.get(EMLOYEE_API_BASE_URL+'/products')
+    }
+    addProduct(product){
+        return axios.post(EMLOYEE_API_BASE_URL+'/product',product)
+    }
+    //category
+    getCategories(){
+        return axios.get(EMLOYEE_API_BASE_URL+'/categories')
+    }
+
     
 }
 
