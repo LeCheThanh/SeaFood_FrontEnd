@@ -13,7 +13,10 @@ export function handleImageChange(event, setProduct) {
           const imagePath = response.data;
           setProduct(prevProduct => ({
             ...prevProduct,
-            image: imagePath
+            product: {
+              ...prevProduct.product,
+              image: imagePath
+            }
           }));
         toast.success("Upload ảnh thành công", { position: "top-right" });
       })
