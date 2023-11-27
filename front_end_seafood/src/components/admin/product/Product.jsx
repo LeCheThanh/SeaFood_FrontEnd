@@ -44,9 +44,9 @@ function Product() {
                     </div>
                     {getAllProduct && getAllProduct.length > 0 ? (
                         <div>
-                          <table className='table caption-top bg-white rounded mt-2'>
+                          <table className='table caption-top bg-white rounded mt-2' style={{ verticalAlign: 'middle' }}>
                                 <caption className='text-white fs-4'>Danh sách sản phẩm</caption>
-                                <thead>
+                                <thead className="text-center">
                                     <tr>
                                     <th scope="col">STT</th>
                                     <th scope="col">Tên sản phẩm</th>
@@ -58,19 +58,21 @@ function Product() {
                                     <th scope="col">Hành động</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="text-center">
                                     {currentProducts.map((product, index) => (
                                     <tr key={product.id}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{product.name}</td>
                                         <td>{product.description}</td>
                                         <td>{product.category.name}</td>
-                                        <td>{product.image}</td>
+                                        <td className="w-25">
+                                            <img className="img-fluid img-thumbnail" src={product.image} alt="productImgae" /></td>
                                         <td>{formatDate(product.createAt)}</td>
-                                        <td>{formatDate(product.updateAt)}</td>
+                                        <td>{formatDate(product.updateAt)}</td> 
                                         <td>
+                                            <button class="btn btn-outline-primary" onClick={() => product.id}><i class="bi bi-eye-fill"></i></button>
                                             <button class="btn btn-outline-primary" onClick={() => product.id}><i class="bi bi-pencil-fill"></i></button>
-                                            <button class="btn btn-outline-danger" onClick={() => product.id}><i class="bi bi-trash3"></i></button>
+                                            <button class="btn btn-outline-danger" onClick={() => product.id}><i class="bi bi-trash3-fill"></i></button>
                                         </td>
                                     </tr>
                                     ))}
