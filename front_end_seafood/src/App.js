@@ -15,7 +15,7 @@ function App() {
             <div>
               <Routes>
                   <Route path='/admin/index'exact Component={Dashboard}></Route>
-                  <Route path='/admin/product'exact Component={Product}></Route>
+                  <Route path='/admin/products'exact Component={Product}></Route>
                   <Route path='/admin/add-product'exact Component={CreateProduct}></Route>
                   <Route path='/register'exact Component={Register}></Route>
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>

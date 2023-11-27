@@ -11,10 +11,6 @@ function Sidebar() {
         <hr className='text-dark' />
         <div className='list-group list-group-flush'>
             <a className='list-group-item list-group-item py-2'>
-                <i className='bi bi-speedometer2 fs-5 me-3'></i>
-                <span>Dashboard</span>
-            </a>
-            <a className='list-group-item list-group-item py-2'>
                 <i className='bi bi-house fs-5 me-3'></i>
                 <span>Home</span>
             </a>
@@ -23,11 +19,7 @@ function Sidebar() {
                 <span>Dashboard</span>
             </Link>
         
-            <a className='list-group-item list-group-item py-2'>
-             <i className='bi bi-table fs-5 me-3'></i>
-                <span>Products</span>
-            </a>
-            <Link className='list-group-item list-group-item py-2' to='/admin/product'>
+            <Link className='list-group-item list-group-item py-2' to='/admin/products'>
                 <i className='bi bi-table fs-5 me-3'></i>
                 <span>Products</span>
             </Link>
