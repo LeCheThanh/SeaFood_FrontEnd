@@ -33,6 +33,13 @@ class AdminApiService{
     addProduct(product){
         return axios.post(EMLOYEE_API_BASE_URL+'/product',product)
     }
+    deleteProduct(id){
+        return axios.delete(EMLOYEE_API_BASE_URL+'/product/'+id)
+        //     params:{
+        //         id: id
+        //     }
+        // })
+    }
     //category
     getCategories(){
         return axios.get(EMLOYEE_API_BASE_URL+'/categories')

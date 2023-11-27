@@ -4,6 +4,7 @@ import Sidebar from '../Sidebar'
 import Nav from '../Nav'
 import { formatDate } from "../../../utils/formatDate";
 import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 function Product() {
     const [toggle, setToggle] = useState(true);
     const Toggle = ()=>{
@@ -23,6 +24,39 @@ function Product() {
       const indexOfLastOrder = currentPage * ordersPerPage;
       const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
       const currentProducts = getAllProduct.slice(indexOfFirstOrder, indexOfLastOrder);
+    //   const [deleteSuccess, setDeleteSuccess] = useState(false);
+    //   const deleteProduct = (id) => {
+    //     AdminApiService.deleteProduct(id)
+    //       .then(response => {
+    //         // const status = response.data.status;
+    //         // console.log(response);
+    //         // if(status === 'Ok'){
+    //         //     toast.success("Xóa thành công", { position: "top-right" });
+    //         // }else
+    //         // toast.error("Xóa thất bại", { position: "top-right" });
+    //         setDeleteSuccess(true);
+    //         toast.success("Xóa thành công", { position: "top-right" });
+            
+    //       })
+    //       .catch(error =>  toast.promise("Lỗi server", { position: "top-right" }));
+    //   };
+    const deleteProduct = (id) => {
+        AdminApiService.deleteProduct(id)
+          .then(response => {
+            if (response.data.deleted) {
+              // Xóa sản phẩm thành công, cập nhật danh sách sản phẩm
+              const updatedProducts = getAllProduct.filter(product => product.id !== id);
+              setGellAllProduct(updatedProducts);
+              toast.success("Xóa thành công", { position: "top-right" });
+            }
+          })
+          .catch(error => toast.error("Xóa thất bại", { position: "top-right" }));
+      };
+      const confirmDelete = (id) => {
+        if (window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?")) {
+          deleteProduct(id);
+        }
+      };
     return (
         <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -72,7 +106,7 @@ function Product() {
                                         <td>
                                             <button class="btn btn-outline-primary" onClick={() => product.id}><i class="bi bi-eye-fill"></i></button>
                                             <button class="btn btn-outline-primary" onClick={() => product.id}><i class="bi bi-pencil-fill"></i></button>
-                                            <button class="btn btn-outline-danger" onClick={() => product.id}><i class="bi bi-trash3-fill"></i></button>
+                                            <button class="btn btn-outline-danger" onClick={() => confirmDelete(product.id)}><i class="bi bi-trash3-fill"></i></button>
                                         </td>
                                     </tr>
                                     ))}
@@ -108,7 +142,7 @@ function Product() {
                         ) : (
                         <p>Loading.....</p>
                         )}
-                    
+                     <ToastContainer />
                 </div>
             </div>
         </div>
