@@ -7,13 +7,13 @@ class AdminApiService{
         return axios.post(EMLOYEE_API_BASE_URL+'/auth/login',data);
     }
     countOrder(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/count')
+        return axios.get(EMLOYEE_API_BASE_URL+'/order/count');
     }
     countOrderShipping(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/count/shippingstate')
+        return axios.get(EMLOYEE_API_BASE_URL+'/order/count/shippingstate');
     }
     getLatestOrder(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/latest-order')
+        return axios.get(EMLOYEE_API_BASE_URL+'/order/latest-order');
     }
     monthlySales(year, month){
         return axios.get(EMLOYEE_API_BASE_URL+'/order/monthly-sales',{
@@ -25,24 +25,32 @@ class AdminApiService{
     }
     //Product
     countProduct(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/product/count')
+        return axios.get(EMLOYEE_API_BASE_URL+'/product/count');
     }
     getAllProduct(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/products')
+        return axios.get(EMLOYEE_API_BASE_URL+'/products');
     }
     addProduct(product){
-        return axios.post(EMLOYEE_API_BASE_URL+'/product',product)
+        return axios.post(EMLOYEE_API_BASE_URL+'/product',product);
     }
     deleteProduct(id){
-        return axios.delete(EMLOYEE_API_BASE_URL+'/product/'+id)
+        return axios.delete(EMLOYEE_API_BASE_URL+'/product/'+id);
         //     params:{
         //         id: id
         //     }
         // })
     }
+    //variant Product
+    getVariantByProduct(id){
+        return axios.get(EMLOYEE_API_BASE_URL+'/product/'+id+'/variant');
+    }
+     //variant Product
+     delVariantById(id){
+        return axios.delete(EMLOYEE_API_BASE_URL+'/product/variant/'+id);
+    }
     //category
     getCategories(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/categories')
+        return axios.get(EMLOYEE_API_BASE_URL+'/categories');
     }
 
     

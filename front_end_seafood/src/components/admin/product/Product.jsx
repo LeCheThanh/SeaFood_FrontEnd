@@ -5,6 +5,9 @@ import Nav from '../Nav'
 import { formatDate } from "../../../utils/formatDate";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Modal } from 'react-bootstrap';
+import { formatCurrency } from '../../../utils/formatCurrency';   
 function Product() {
     const [toggle, setToggle] = useState(true);
     const Toggle = ()=>{
@@ -24,22 +27,6 @@ function Product() {
       const indexOfLastOrder = currentPage * ordersPerPage;
       const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
       const currentProducts = getAllProduct.slice(indexOfFirstOrder, indexOfLastOrder);
-    //   const [deleteSuccess, setDeleteSuccess] = useState(false);
-    //   const deleteProduct = (id) => {
-    //     AdminApiService.deleteProduct(id)
-    //       .then(response => {
-    //         // const status = response.data.status;
-    //         // console.log(response);
-    //         // if(status === 'Ok'){
-    //         //     toast.success("Xóa thành công", { position: "top-right" });
-    //         // }else
-    //         // toast.error("Xóa thất bại", { position: "top-right" });
-    //         setDeleteSuccess(true);
-    //         toast.success("Xóa thành công", { position: "top-right" });
-            
-    //       })
-    //       .catch(error =>  toast.promise("Lỗi server", { position: "top-right" }));
-    //   };
     const deleteProduct = (id) => {
         AdminApiService.deleteProduct(id)
           .then(response => {
@@ -57,6 +44,28 @@ function Product() {
           deleteProduct(id);
         }
       };
+    const [variants, setVariants] = useState([]);
+    const [selectedVariant, setSelectedVariant] = useState(null);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const getVariants = async (id) => {
+      try {
+        const response = await AdminApiService.getVariantByProduct(id);
+        setVariants(response.data);
+        const product = getAllProduct.find((product) => product.id === id);
+        setSelectedProduct(product);
+        setShowModal(true);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+  const [showModal, setShowModal] = useState(false);
+
+  const closeModal = () => {
+    setShowModal(false);
+  const hasVariants = variants.length > 0;
+  };
+
     return (
         <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -72,7 +81,7 @@ function Product() {
                         </div>
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <Link to='/admin/add-product'>
+                    <Link to='/admin/product/add-product'>
                     <button type="button" class="btn btn-primary">Thêm sản phẩm</button>
                     </Link>
                     </div>
@@ -100,12 +109,12 @@ function Product() {
                                         <td>{product.description}</td>
                                         <td>{product.category.name}</td>
                                         <td className="w-25">
-                                            <img className="img-fluid img-thumbnail" src={product.image} alt="productImgae" /></td>
+                                            <img className="img-fluid img-thumbnail" src={product.image}  alt="productImgae" /></td>
                                         <td>{formatDate(product.createAt)}</td>
                                         <td>{formatDate(product.updateAt)}</td> 
                                         <td>
-                                            <button class="btn btn-outline-primary" onClick={() => product.id}><i class="bi bi-eye-fill"></i></button>
-                                            <button class="btn btn-outline-primary" onClick={() => product.id}><i class="bi bi-pencil-fill"></i></button>
+                                            <button class="btn btn-outline-primary" onClick={() => getVariants(product.id)}><i class="bi bi-eye-fill"></i></button>
+                                            <button class="btn btn-outline-primary" onClick={() => (product.id)}><i class="bi bi-pencil-fill"></i></button>
                                             <button class="btn btn-outline-danger" onClick={() => confirmDelete(product.id)}><i class="bi bi-trash3-fill"></i></button>
                                         </td>
                                     </tr>
@@ -142,8 +151,41 @@ function Product() {
                         ) : (
                         <p>Loading.....</p>
                         )}
-                     <ToastContainer />
-                </div>
+                    {/* Modal */}
+                      {showModal && (
+                        <Modal className="" show={showModal} onHide={closeModal}>
+                          <Modal.Header closeButton>
+                            {selectedProduct && (
+                            <Modal.Title>Biến thể của: {selectedProduct.name}</Modal.Title>
+                          )}
+                          </Modal.Header>
+                          <Modal.Body>
+                            {variants.length > 0?(
+                            variants.map((variant) => (  
+                              <div key={variant.id} className="text-center">
+                                <p>Tên biến thể: {variant.name}</p>
+                                <p>Giá: {formatCurrency(variant.price,'VND')}</p>
+                                {/* Thông tin biến thể bổ sung */} 
+                                {/* ... */}
+                              </div> 
+                            ))  
+                          ):(
+                            <div> Không có biến thể nào của sản phẩm</div>
+                          )}  
+                          </Modal.Body>
+                          <Modal.Footer>
+                          {variants.length > 0 &&(
+                            /* <Button variant="secondary" onClick={closeModal}>
+                              Đóng
+                            </Button> */
+                            <Link to={'/admin/product/product-detail/'+selectedProduct.id}>
+                              <Button>Xem chi tiết</Button>
+                              </Link>)}
+                          </Modal.Footer>
+                        </Modal>
+                      )}
+                  </div>
+                  <ToastContainer />  
             </div>
         </div>
     </div>
