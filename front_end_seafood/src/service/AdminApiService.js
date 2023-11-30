@@ -48,6 +48,16 @@ class AdminApiService{
      delVariantById(id){
         return axios.delete(EMLOYEE_API_BASE_URL+'/product/variant/'+id);
     }
+    createVariant(id,variant){
+        return axios.post(EMLOYEE_API_BASE_URL+'/product/'+id+'/variant',variant);
+    }
+    updateVariant(id,variant){
+        return axios.put(EMLOYEE_API_BASE_URL+'/product/variant/'+id,variant);
+    }
+    getVariant(id){
+        return axios.get(EMLOYEE_API_BASE_URL+'/product/variant/'+id);
+    }
+
     //category
     getCategories(){
         return axios.get(EMLOYEE_API_BASE_URL+'/categories');

@@ -179,8 +179,8 @@ function CreateProduct() {
                   <button type="submit" className="btn btn-primary w-100">Thêm</button>
                   <div className='mt-3'>
                   <Link to='/admin/products'>
-                    <a>Quay lại</a>
-                  </Link> 
+                            <button type="button" class="btn btn-dark">Quay lại</button>
+                  </Link>
                   </div>
                 </form>
                 <ToastContainer /> {/* Đây là nơi hiển thị toast */}

@@ -156,30 +156,38 @@ function Product() {
                         <Modal className="" show={showModal} onHide={closeModal}>
                           <Modal.Header closeButton>
                             {selectedProduct && (
-                            <Modal.Title>Biến thể của: {selectedProduct.name}</Modal.Title>
+                            <Modal.Title>
+                                   <h3>Biến thể của: {selectedProduct.name}</h3>
+                              </Modal.Title>
                           )}
                           </Modal.Header>
                           <Modal.Body>
                             {variants.length > 0?(
-                            variants.map((variant) => (  
-                              <div key={variant.id} className="text-center">
-                                <p>Tên biến thể: {variant.name}</p>
-                                <p>Giá: {formatCurrency(variant.price,'VND')}</p>
-                                {/* Thông tin biến thể bổ sung */} 
-                                {/* ... */}
-                              </div> 
-                            ))  
+                              <div className="card-group">
+                              {variants.map((variant) => (
+                                <div key={variant.id} className="card">
+                                  <img src={variant.image} className="card-img-top" alt="..." />
+                                  <div className="card-body">
+                                    <h5 className="card-title">{variant.name}</h5>
+                                    <p className="card-text">Giá: {formatCurrency(variant.price, 'VND')}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           ):(
                             <div> Không có biến thể nào của sản phẩm</div>
                           )}  
                           </Modal.Body>
                           <Modal.Footer>
-                          {variants.length > 0 &&(
+                          {variants.length > 0 ?(
                             /* <Button variant="secondary" onClick={closeModal}>
                               Đóng
                             </Button> */
                             <Link to={'/admin/product/product-detail/'+selectedProduct.id}>
                               <Button>Xem chi tiết</Button>
+                              </Link>) :
+                              ( <Link to={'/admin/product/product-detail/'+selectedProduct.id}>
+                              <Button>Thêm biến thể</Button>
                               </Link>)}
                           </Modal.Footer>
                         </Modal>
