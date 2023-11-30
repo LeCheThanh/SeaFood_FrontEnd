@@ -8,15 +8,18 @@ import AdminLogin from './components/admin/LoginAdmin';
 import Dashboard from './components/admin/Dashboard';
 import Product from './components/admin/product/Product';
 import CreateProduct from './components/admin/product/CreateProduct';
+import ProductDetail from './components/admin/product/ProductDetail';
 function App() {
   return (
   <div>
       <Router>
             <div>
               <Routes>
-                  <Route path='/admin/index'exact Component={Dashboard}></Route>
+                  <Route path="/admin" exact Component={Dashboard}></Route>
+                  <Route path='/admin/dashboard'exact Component={Dashboard}></Route>
                   <Route path='/admin/products'exact Component={Product}></Route>
-                  <Route path='/admin/add-product'exact Component={CreateProduct}></Route>
+                  <Route path='/admin/product/add-product'exact Component={CreateProduct}></Route>
+                  <Route path='/admin/product/product-detail/:id'exact Component={ProductDetail}></Route>
                   <Route path='/register'exact Component={Register}></Route>
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>
               </Routes>

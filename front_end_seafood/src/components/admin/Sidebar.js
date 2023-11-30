@@ -14,7 +14,7 @@ function Sidebar() {
                 <i className='bi bi-house fs-5 me-3'></i>
                 <span>Home</span>
             </a>
-            <Link className='list-group-item list-group-item py-2' to='/admin/index'>
+            <Link className='list-group-item list-group-item py-2' to='/admin/dashboard'>
                 <i className='bi bi-speedometer2 fs-5 me-3'></i>
                 <span>Dashboard</span>
             </Link>
