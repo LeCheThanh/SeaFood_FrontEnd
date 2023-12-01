@@ -8,6 +8,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Modal } from 'react-bootstrap';
 import { formatCurrency } from '../../../utils/formatCurrency';   
+import UtilsApiService from "../../../service/UtilsApiService";
 function Product() {
     const [toggle, setToggle] = useState(true);
     const Toggle = ()=>{
@@ -65,7 +66,118 @@ function Product() {
     setShowModal(false);
   const hasVariants = variants.length > 0;
   };
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const openModalUpdate = () =>{
+    setShowModalUpdate(true);
+  }
+  const closeModalUpdate = () => {
+    setShowModalUpdate(false);
+  };
+  const [productData,setProductData] = useState({});
+  const [productRequest,setProductRequest] = useState({
 
+  });
+  const handleImageUpload = async (event, setVariantRequest)=>{
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      await UtilsApiService.UploadImageImgur(formData)
+        .then((response) => {
+          const imagePath = response.data;
+          setProductRequest((prevProductRequest) => ({
+            ...prevProductRequest,
+            image: imagePath,
+          }));
+          toast.success('Upload ảnh thành công', { position: 'top-right' });
+        })
+        .catch((error) => {
+          if (event.target) {
+            event.target.value = null;
+          }
+          // Xử lý lỗi nếu có
+          toast.error('Upload thất bại, ' + error.response.data.message, { position: 'top-right' });
+        });
+    }
+  }
+  const getDataProduct=async (id)=>{
+    AdminApiService.getProductById(id)
+    .then(response=>{
+      const Data = response.data;
+      setProductData(Data);
+      openModalUpdate();
+    })
+    .catch(error=>console.log(error));
+  }
+  const handleInputChange = (event)=>{
+    const { name, value } = event.target;
+    setProductRequest((prevProductRequest) => ({
+      ...prevProductRequest,
+      [name]: value,
+    }));
+    if(event.target.files && event.target.files.length > 0 && name === 'image'){
+      handleImageUpload(event,setProductRequest);
+    }
+  }
+  const handleUpdateSubmit = async (id,event)=>{
+    event.preventDefault();
+    try {
+        // Kiểm tra nếu updatedVariantData không có sự thay đổi so với variantData
+      // const response = await AdminApiService.updateVariant(id,updatedVariantData);
+      const response = await AdminApiService.updateProduct(id, {
+        ...productData,
+        ...productRequest,
+      });
+     
+      const updatedProduct = response.data;
+      // setVariantData(updatedVariant);
+    toast.success("Cập nhật sản phẩm thành công", { position: "top-right" });
+  
+       // Cập nhật danh sách biến thể
+    // setGellAllProduct((prevProducts) => {
+    //   const updatedProducts = prevProducts.map((product) => {
+    //     if (product.id === updatedProduct.id) {
+    //       return updatedProduct;
+    //     }
+    //     return product;
+    //   });
+    //   return updatedProducts;
+    // });
+    setGellAllProduct((prevProducts) => {
+      const updatedProducts = prevProducts.map((product) => {
+        if (product.id === updatedProduct.id) {
+          return {
+            ...product,
+            category: updatedProduct.category,
+          };
+        }
+        return product;
+      });
+      return updatedProducts;
+    });
+         // Đóng modal
+         closeModalUpdate();
+         window.location.reload();
+    } catch (error) {
+      toast.error("Cập nhật thất bại", { position: "top-right" });
+    }
+  }
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    // Fetch categories data from the server
+    const fetchCategories = async () => {
+      try {
+        const response = await AdminApiService.getCategories(); // Replace `getCategories` with the actual method to fetch categories
+        setCategories(response.data); // Assuming the response contains the array of category objects
+      } catch (error) {
+        console.error(error);
+        // Handle error
+      }
+    };
+    fetchCategories();
+  }, []);
+  
     return (
         <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -95,6 +207,7 @@ function Product() {
                                     <th scope="col">Tên sản phẩm</th>
                                     <th scope="col">Mô tả</th>
                                     <th scope="col">Danh mục</th>
+                                    <th scope="col">Slug</th>
                                     <th scope="col">Ảnh</th>
                                     <th scope="col">Ngày tạo</th>
                                     <th scope="col">Ngày cập nhật</th>
@@ -108,13 +221,14 @@ function Product() {
                                         <td>{product.name}</td>
                                         <td>{product.description}</td>
                                         <td>{product.category.name}</td>
+                                        <td>{product.slug}</td> 
                                         <td className="w-25">
                                             <img className="img-fluid img-thumbnail" src={product.image}  alt="productImgae" /></td>
                                         <td>{formatDate(product.createAt)}</td>
                                         <td>{formatDate(product.updateAt)}</td> 
                                         <td>
                                             <button class="btn btn-outline-primary" onClick={() => getVariants(product.id)}><i class="bi bi-eye-fill"></i></button>
-                                            <button class="btn btn-outline-primary" onClick={() => (product.id)}><i class="bi bi-pencil-fill"></i></button>
+                                            <button class="btn btn-outline-primary" onClick={() => getDataProduct(product.id)}><i class="bi bi-pencil-fill"></i></button>
                                             <button class="btn btn-outline-danger" onClick={() => confirmDelete(product.id)}><i class="bi bi-trash3-fill"></i></button>
                                         </td>
                                     </tr>
@@ -193,6 +307,54 @@ function Product() {
                         </Modal>
                       )}
                   </div>
+                    {/* Modal update product */}
+                      {/* Modal */}
+                      {showModalUpdate && (
+                        <Modal className="" show={showModalUpdate} onHide={closeModalUpdate}>
+                          <Modal.Header closeButton>
+                            {productData.name && (
+                            <Modal.Title>Cập nhật sản phẩm: {productData.name}</Modal.Title>
+                          )}
+                          </Modal.Header>
+                          <Modal.Body>
+                          <form onSubmit={(event) => handleUpdateSubmit(productData.id, event)} className='pad-bg' >
+                              <div className="form-group">
+                                <label htmlFor="name" className="form-label">Tên sản phẩm</label>
+                                <input className="form-control" id="name" name="name"  value={productRequest.name || productData.name} onChange={handleInputChange} required />
+                              </div>
+                              <div className="mb-3">
+                                <label htmlFor="description" className="form-label">Mô tả biến thể</label>
+                                <input  className="form-control" id="description" name="description" required value={productRequest.description || productData.description} onChange={handleInputChange} />
+                              </div>
+                              <div className="mb-3">
+                                <label htmlFor="category" className="form-label">Danh mục</label>
+                                <select className="form-control" id="category" name="category" value={productRequest.category || productData.category} onChange={handleInputChange} required>
+                                <option value={productData.category && productData.category.name}>{productData.category && productData.category.name}</option>
+                                    {categories.map((category) => (
+                                    <option key={category.id} value={category.id}>{category.name}</option>
+                                    ))}
+                                </select>
+                                </div>
+                              <div className="mb-3">
+                                <label htmlFor="image" className="form-label" >Hình ảnh</label>
+                                {(productRequest.image||productData.image ) && 
+                                <img src={productRequest.image||productData.image} alt="image" width={'200px'} height={"200px"}/> }
+                                <input
+                                  type="file"
+                                  className="form-control"
+                                  id="image"
+                                  name="image"
+                                  onChange={handleInputChange}
+                                  required
+                                />
+                              </div>
+                            <button type="submit" className="btn btn-primary w-100">Cập nhật</button>
+                            </form>
+                          </Modal.Body>
+                          <Modal.Footer>
+                          </Modal.Footer>
+                        </Modal>
+                      )}
                   <ToastContainer />  
             </div>
         </div>

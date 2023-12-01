@@ -326,31 +326,31 @@ function ProductDetail() {
                      {showModalUpdate && (
                         <Modal className="" show={showModalUpdate} onHide={closeModalUpdate}>
                           <Modal.Header closeButton>
-                            {selectedProductName && (
-                            <Modal.Title>Cập nhật biến thể: {}</Modal.Title>
+                            {variantData.name && (
+                            <Modal.Title>Cập nhật biến thể: {variantData.name}</Modal.Title>
                           )}
                           </Modal.Header>
                           <Modal.Body>
                           <form onSubmit={(event) => handleUpdateSubmit(variantData.id, event)} className='pad-bg' >
                               <div className="form-group">
                                 <label htmlFor="name" className="form-label">Tên biến thể</label>
-                                <input className="form-control" id="name" name="name"  value={updatedVariantData.name || variantData.name || ''} onChange={handleUpdateChange} required />
+                                <input className="form-control" id="name" name="name"  value={updatedVariantData.name || variantData.name} onChange={handleUpdateChange} required />
                               </div>
                               <div className="mb-3">
                                 <label htmlFor="description" className="form-label">Mô tả biến thể</label>
-                                <input  className="form-control" id="description" name="description" required value={updatedVariantData.description ||variantData.description || ''} onChange={handleUpdateChange} />
+                                <input  className="form-control" id="description" name="description" required value={updatedVariantData.description ||variantData.description} onChange={handleUpdateChange} />
                               </div>
                               <div className="mb-3">
                                 <label htmlFor="price" className="form-label">Giá</label>
-                                <input  className="form-control" id="price" name="price" required value={updatedVariantData.price||variantData.price || ''} onChange={handleUpdateChange} />
+                                <input  className="form-control" id="price" name="price" required value={updatedVariantData.price||variantData.price} onChange={handleUpdateChange} />
                               </div>
                               <div className="mb-3">
                                 <label htmlFor="wholePrice" className="form-label">Giá sỉ</label>
-                                <input  className="form-control" id="whosalePrice" name="whosalePrice" required value={updatedVariantData.whosalePrice||variantData.whosalePrice || ''} onChange={handleUpdateChange} />
+                                <input  className="form-control" id="whosalePrice" name="whosalePrice" required value={updatedVariantData.whosalePrice||variantData.whosalePrice} onChange={handleUpdateChange} />
                               </div>
                               <div className="mb-3">
                                 <label htmlFor="stock" className="form-label">Số lượng</label>
-                                <input  className="form-control" id="stock" name="stock" required value={updatedVariantData.stock||variantData.stock|| ''} onChange={handleUpdateChange} />
+                                <input  className="form-control" id="stock" name="stock" required value={updatedVariantData.stock||variantData.stock} onChange={handleUpdateChange} />
                               </div>
                               <div className="mb-3">
                                 <label htmlFor="image" className="form-label" >Hình ảnh</label>
