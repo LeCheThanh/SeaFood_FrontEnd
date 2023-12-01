@@ -9,6 +9,8 @@ import Dashboard from './components/admin/Dashboard';
 import Product from './components/admin/product/Product';
 import CreateProduct from './components/admin/product/CreateProduct';
 import ProductDetail from './components/admin/product/ProductDetail';
+import Categories from './components/admin/category/Categories';
+import CreateCategory from './components/admin/category/CreateCategory';
 function App() {
   return (
   <div>
@@ -20,8 +22,10 @@ function App() {
                   <Route path='/admin/products'exact Component={Product}></Route>
                   <Route path='/admin/product/add-product'exact Component={CreateProduct}></Route>
                   <Route path='/admin/product/product-detail/:id'exact Component={ProductDetail}></Route>
-                  <Route path='/register'exact Component={Register}></Route>
+                  <Route path='/admin/categories'exact Component={Categories}></Route>
+                  <Route path='/admin/category/add-category'exact Component={CreateCategory}></Route>
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>
+                  <Route path='/register'exact Component={Register}></Route>
               </Routes>
             </div>
     </Router>
