@@ -11,6 +11,7 @@ import CreateProduct from './components/admin/product/CreateProduct';
 import ProductDetail from './components/admin/product/ProductDetail';
 import Categories from './components/admin/category/Categories';
 import CreateCategory from './components/admin/category/CreateCategory';
+import Orders from './components/admin/order/Orders';
 function App() {
   return (
   <div>
@@ -24,6 +25,7 @@ function App() {
                   <Route path='/admin/product/product-detail/:id'exact Component={ProductDetail}></Route>
                   <Route path='/admin/categories'exact Component={Categories}></Route>
                   <Route path='/admin/category/add-category'exact Component={CreateCategory}></Route>
+                  <Route path='/admin/orders'exact Component={Orders}></Route>
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>
                   <Route path='/register'exact Component={Register}></Route>
               </Routes>
