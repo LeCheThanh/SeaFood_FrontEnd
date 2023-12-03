@@ -1,22 +1,22 @@
 import axios from "axios";
 
-const EMLOYEE_API_BASE_URL="http://localhost:8080/api/admin";
+const ADMIN_API_BASE_URL="http://localhost:8080/api/admin";
 // const CREATE_EMPLOYEE="http://localhost:8080/api/createemployees";
 class AdminApiService{
     loginAdmin(data){
-        return axios.post(EMLOYEE_API_BASE_URL+'/auth/login',data);
+        return axios.post(ADMIN_API_BASE_URL+'/auth/login',data);
     }
     countOrder(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/count');
+        return axios.get(ADMIN_API_BASE_URL+'/order/count');
     }
     countOrderShipping(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/count/shippingstate');
+        return axios.get(ADMIN_API_BASE_URL+'/order/count/shippingstate');
     }
     getLatestOrder(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/latest-order');
+        return axios.get(ADMIN_API_BASE_URL+'/order/latest-order');
     }
     monthlySales(year, month){
-        return axios.get(EMLOYEE_API_BASE_URL+'/order/monthly-sales',{
+        return axios.get(ADMIN_API_BASE_URL+'/order/monthly-sales',{
             params:{
                 year: year,
                 month: month
@@ -25,45 +25,70 @@ class AdminApiService{
     }
     //Product
     countProduct(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/product/count');
+        return axios.get(ADMIN_API_BASE_URL+'/product/count');
     }
     getAllProduct(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/products');
+        return axios.get(ADMIN_API_BASE_URL+'/products');
     }
     addProduct(product){
-        return axios.post(EMLOYEE_API_BASE_URL+'/product',product);
+        return axios.post(ADMIN_API_BASE_URL+'/product',product);
     }
     deleteProduct(id){
-        return axios.delete(EMLOYEE_API_BASE_URL+'/product/'+id);
+        return axios.delete(ADMIN_API_BASE_URL+'/product/'+id);
         //     params:{
         //         id: id
         //     }
         // })
     }
+    getProductById(id){
+        return axios.get(ADMIN_API_BASE_URL+'/product/'+id);
+    }
+    updateProduct(id,product){
+        return axios.put(ADMIN_API_BASE_URL+'/product/'+id,product);
+    }
     //variant Product
     getVariantByProduct(id){
-        return axios.get(EMLOYEE_API_BASE_URL+'/product/'+id+'/variant');
+        return axios.get(ADMIN_API_BASE_URL+'/product/'+id+'/variant');
     }
      //variant Product
      delVariantById(id){
-        return axios.delete(EMLOYEE_API_BASE_URL+'/product/variant/'+id);
+        return axios.delete(ADMIN_API_BASE_URL+'/product/variant/'+id);
     }
     createVariant(id,variant){
-        return axios.post(EMLOYEE_API_BASE_URL+'/product/'+id+'/variant',variant);
+        return axios.post(ADMIN_API_BASE_URL+'/product/'+id+'/variant',variant);
     }
     updateVariant(id,variant){
-        return axios.put(EMLOYEE_API_BASE_URL+'/product/variant/'+id,variant);
+        return axios.put(ADMIN_API_BASE_URL+'/product/variant/'+id,variant);
     }
     getVariant(id){
-        return axios.get(EMLOYEE_API_BASE_URL+'/product/variant/'+id);
+        return axios.get(ADMIN_API_BASE_URL+'/product/variant/'+id);
     }
 
     //category
     getCategories(){
-        return axios.get(EMLOYEE_API_BASE_URL+'/categories');
+        return axios.get(ADMIN_API_BASE_URL+'/categories');
+    }
+    deleteCategory(id){
+        return axios.delete(ADMIN_API_BASE_URL+'/category/'+id);
+    }
+    createCategory(category){
+        return axios.post(ADMIN_API_BASE_URL+'/category',category);
+    }
+    getCategoryById(id){
+        return axios.get(ADMIN_API_BASE_URL+'/category/'+id)
+    }
+    updateCategory(id,category){
+        return axios.put(ADMIN_API_BASE_URL+'/category/'+id,category)
+    }
+    //Order
+    getAllOrder(){
+        // mean orders?
+        return axios.get(ADMIN_API_BASE_URL+'/order/all');
+    }
+    updateOrderState(id){
+        return axios.put(ADMIN_API_BASE_URL+'/order/'+id+'/update-state');
     }
 
-    
 }
 
 export default new AdminApiService()

@@ -25,7 +25,26 @@ function Orders() {
       const indexOfLastOrder = currentPage * ordersPerPage;
       const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
       const currentProducts = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-
+      const handleUpdateState = async (id) =>{
+        try{
+            const response = await AdminApiService.updateOrderState(id);
+            // Cập nhật trạng thái mới trong danh sách orders
+            const updatedOrders = orders.map(order => {
+            if (order.id === id) {
+                return {
+                ...order,
+                orderState: response.data
+                };
+            }
+            return order;
+            });
+            setOrders(updatedOrders);
+            console.log(response.data);
+        } catch (error) {
+        // Xử lý lỗi
+            console.error(error.response.data);
+      }
+    };
   return (
      <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -47,7 +66,6 @@ function Orders() {
                                 <thead className="text-center">
                                     <tr>
                                     <th scope='col'>STT</th>
-                                    <th scope="col">Code</th>
                                     <th scope="col">Email khách hàng</th>
                                     <th scope="col">Tên người nhận</th>
                                     <th scope="col">Số điện thoại</th>
@@ -56,28 +74,42 @@ function Orders() {
                                     <th scope="col">Phương thức thanh toán</th>
                                     <th scope="col">Tổng tiền</th>
                                     <th scope="col">Ngày tạo</th>
-                          
+                                    <th scope="col">Hành động</th>
                                     </tr>
                                 </thead>
                                 <tbody className="text-center">
                                     {currentProducts.map((order, index) => (
                                     <tr key={order.id}>
                                         <th scope="row">{index + 1}</th>
-                                        <td>{order.code}</td>
                                         <td>{order.receiverEmail}</td>
                                         <td>{order.receiverName}</td>
                                         <td>{order.receiverPhone}</td>
                                         <td>{order.receiverAddress}</td>
                                         <td>
-                                        {/* {order.orderState.map((state) => (
-                                            <span key={state.id}>{state.state}</span>
-                                        ))} */}
+                                        {Array.isArray(order.orderState) ?
+                                        order.orderState.map((state) => (
+                                            // <span key={state.id}>{state.state}</span>
+                                            <span key={state.id}>
+                                            {state.state === 'Đang giao' && (
+                                              <button type='button' className="btn btn-primary">Đang giao</button>
+                                            )}
+                                            {state.state === 'Chờ xác nhận' && (
+                                              <button type='button' className="btn btn-warning" onClick={()=>handleUpdateState(order.id)} >Chờ xác nhận</button>
+                                            )}
+                                             {state.state === 'Hoàn thành' && (
+                                              <button type='button' className="btn btn-success">Đã hoàn thành</button>
+                                            )}
+                                          </span>
+                                        )):(
+                                            <button type='button' className="btn btn-primary">Đang giao</button>
+                                        )}
                                         </td>
-                                        <td>{order.paymentMethod}</td>
+                                        <td>{order.payment}</td>
                                         <td>{formatCurrency(order.finalPrice, 'VND')}</td>
                                         <td>{formatDate(order.createdAt)}</td>
                                         {/* <td>{formatDate(order.updateAt)}</td>  */}
-                        
+                                        <td>
+                                            <button class="btn btn-outline-primary" onClick={() => (order.id)}><i class="bi bi-eye-fill"></i></button></td>
                                     </tr>
                                     ))}
                                 </tbody>

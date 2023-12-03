@@ -27,10 +27,10 @@ function Sidebar() {
                 <i className='bi bi-list-ul fs-5 me-3'></i>
                 <span>Categories</span>
             </Link>
-            <a className='list-group-item list-group-item py-2'>
+            <Link className='list-group-item list-group-item py-2' to='/admin/orders'>
                 <i className='bi bi-receipt fs-5 me-3'></i>
                 <span>Orders</span>
-            </a>
+            </Link>
             <a className='list-group-item list-group-item py-2'>
                 <i className='bi bi-people-fill fs-5 me-3'></i>
                 <span>Users</span>
