@@ -251,7 +251,7 @@ function ProductDetail() {
                                     <td>{variant.soldQuantity}</td>
                                     <td>{variant.stock }</td>
                                     <td className="w-25">
-                                        <img className="img-fluid img-thumbnail" src={variant.image}  alt="productImgae" /></td>
+                                        <img className=" w-25 img-fluid img-thumbnail" src={variant.image}  alt="productImgae" /></td>
                                     <td>
                                         <button class="btn btn-outline-primary" onClick={()=> getVariantById(variant.id)}><i class="bi bi-pencil-fill"></i></button>
                                         <button class="btn btn-outline-danger" onClick={() => confirmDelete(variant.id)}><i class="bi bi-trash3-fill"></i></button>

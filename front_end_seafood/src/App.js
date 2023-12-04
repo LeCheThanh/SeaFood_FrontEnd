@@ -12,6 +12,7 @@ import ProductDetail from './components/admin/product/ProductDetail';
 import Categories from './components/admin/category/Categories';
 import CreateCategory from './components/admin/category/CreateCategory';
 import Orders from './components/admin/order/Orders';
+import Users from './components/admin/user/Users';
 function App() {
   return (
   <div>
@@ -26,6 +27,7 @@ function App() {
                   <Route path='/admin/categories'exact Component={Categories}></Route>
                   <Route path='/admin/category/add-category'exact Component={CreateCategory}></Route>
                   <Route path='/admin/orders'exact Component={Orders}></Route>
+                  <Route path='/admin/users'exact Component={Users}></Route>
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>
                   <Route path='/register'exact Component={Register}></Route>
               </Routes>

@@ -223,7 +223,7 @@ function Product() {
                                         <td>{product.category.name}</td>
                                         <td>{product.slug}</td> 
                                         <td className="w-25">
-                                            <img className="img-fluid img-thumbnail" src={product.image}  alt="productImgae" /></td>
+                                            <img className="w-25 img-fluid img-thumbnail" src={product.image}  alt="productImgae" /></td>
                                         <td>{formatDate(product.createAt)}</td>
                                         <td>{formatDate(product.updateAt)}</td> 
                                         <td>
@@ -280,8 +280,9 @@ function Product() {
                               <div className="card-group">
                               {variants.map((variant) => (
                                 <div key={variant.id} className="card">
-                                  <img src={variant.image} className="card-img-top" alt="..." />
+                                  
                                   <div className="card-body">
+                                    <img src={variant.image} className="card-img-top img-fluid img-thumbnail w-50" alt="..." />
                                     <h5 className="card-title">{variant.name}</h5>
                                     <p className="card-text">Giá: {formatCurrency(variant.price, 'VND')}</p>
                                   </div>
