@@ -5,6 +5,8 @@ import { formatDate } from '../../../utils/formatDate';
 import Sidebar from '../Sidebar';
 import Nav from '../Nav';
 import { toast, ToastContainer } from "react-toastify";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Modal } from 'react-bootstrap';
 
 function Orders() {
     const [toggle, setToggle] = useState(true);
@@ -39,12 +41,41 @@ function Orders() {
             return order;
             });
             setOrders(updatedOrders);
-            console.log(response.data);
+            toast.success("Cập nhật trạng thái thành công!", { position: "top-right" })
         } catch (error) {
         // Xử lý lỗi
             console.error(error.response.data);
       }
     };
+    const [showModal, setShowModal] = useState(false);
+
+    const closeModal = () => {
+        setShowModal(false);
+    };
+    const [orderDetails,setOrderDetails] = useState([]);
+    // const handleOrderDetail = async(id)=>{
+    //     try{
+    //         const response = AdminApiService.getOrderDetailByOrder(id);
+    //         console.log(response.data);
+    //         setOrderDetails(response.data);
+    //         setShowModal(true);
+
+    //     }catch(error){
+    //         console.error(error.response.data);
+    //     }
+    // }
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const handleOrderDetail=async (id)=>{
+        AdminApiService.getOrderDetailByOrder(id)
+        .then(response=>{
+          const Data = response.data;
+          const detail = orders.find((order) => order.id === id);
+          setSelectedOrder(detail);
+          setOrderDetails(Data);
+          setShowModal(true);
+        })
+        .catch(error=>toast.error("Không có chi tiết", { position: "top-right" }));
+      }
   return (
      <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -109,7 +140,7 @@ function Orders() {
                                         <td>{formatDate(order.createdAt)}</td>
                                         {/* <td>{formatDate(order.updateAt)}</td>  */}
                                         <td>
-                                            <button class="btn btn-outline-primary" onClick={() => (order.id)}><i class="bi bi-eye-fill"></i></button></td>
+                                            <button class="btn btn-outline-primary" onClick={() => handleOrderDetail(order.id)}><i class="bi bi-eye-fill"></i></button></td>
                                     </tr>
                                     ))}
                                 </tbody>
@@ -144,6 +175,40 @@ function Orders() {
                         ) : (
                         <p>Loading.....</p>
                         )}
+                        {/* Modal */}
+                      {showModal && (
+                        <Modal className="" show={showModal} onHide={closeModal}>
+                          <Modal.Header closeButton>
+                            {selectedOrder && (
+                            <Modal.Title>
+                                   <h3>Chi tiết của đơn hàng: {selectedOrder.code}</h3>
+                              </Modal.Title>
+                            )}
+                          </Modal.Header>
+                          <Modal.Body>
+                            {orderDetails.length > 0?(
+                              <div className="card-group">
+                              {orderDetails.map((detail) => (
+                                <div key={detail.id} className="card">
+                                  <div className="card-body">
+                                    <h5 className="card-title">Tên sản phẩm: {detail.productVariantName}</h5>
+                                    <p className="card-text">Số lượng: {detail.quantity}</p>
+                                    <p className="card-text">Tổng tiền: {formatCurrency(detail.price,'VND')}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ):(
+                            <div> Không có chi tiết nào của đơn hàng</div>
+                          )}  
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" onClick={closeModal}>
+                              Đóng
+                            </Button> 
+                          </Modal.Footer>
+                        </Modal>
+                      )}
                   </div>
                   <ToastContainer />  
             </div>
