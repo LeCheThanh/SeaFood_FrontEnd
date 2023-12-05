@@ -82,8 +82,8 @@ function Categories() {
       
       const updateCategory = response.data;
       // setVariantData(updatedVariant);
-      toast.success("Cập nhật biến thể thành công", { position: "top-right" });
-  
+      toast.success("Cập nhật danh mục thành công", { position: "top-right" });
+      console.log(categoryData);
        // Cập nhật danh sách biến thể
        setCategories((prevCategories) => {
       const updatedCategories = prevCategories.map((category) => {
