@@ -88,6 +88,31 @@ class AdminApiService{
     updateOrderState(id){
         return axios.put(ADMIN_API_BASE_URL+'/order/'+id+'/update-state');
     }
+    getOrderDetailByOrder(id){
+        return axios.get(ADMIN_API_BASE_URL+'/order/detail/'+id);
+    }
+    //User
+    getAllUser(){
+        return axios.get(ADMIN_API_BASE_URL+'/users');
+    }
+    updateWholeSale(id,request){
+        return axios.post(ADMIN_API_BASE_URL+'/user/'+id,null,{
+            params: {newStatus : request},
+        });
+    }
+    createUser(data){
+        return axios.post(ADMIN_API_BASE_URL+'/user',data);
+    }
+    //roles
+    getAllRole(){
+        return axios.get(ADMIN_API_BASE_URL+'/roles');
+    }
+    updateRole(email,roleName){
+        return axios.put(ADMIN_API_BASE_URL+'/user/'+email+'/roles',roleName);
+    }
+    getUserById(id){
+        return axios.get(ADMIN_API_BASE_URL+'/user/'+id);
+    }
 
 }
 

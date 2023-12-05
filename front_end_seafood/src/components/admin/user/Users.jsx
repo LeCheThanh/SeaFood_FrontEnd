@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { Button, Modal } from 'react-bootstrap';
+import { Link } from "react-router-dom";
 
 function Users() {
     const [toggle, setToggle] = useState(true);
@@ -78,6 +79,7 @@ function Users() {
         };
 
     const [selectedRoles, setSelectedRoles] = useState(userData.roles || []);
+    console.log(userData.roles)
     const handleRoleChange = (event) => {
         const roleName = event.target.value;
         const isChecked = event.target.checked;
@@ -90,18 +92,18 @@ function Users() {
           }
         });
       };
+    
       const handleUpdateRoles = (email, event) => {
         event.preventDefault();
-      
-        // Gửi danh sách các quyền đã chọn đi
         // Ví dụ:
         AdminApiService.updateRole(email, selectedRoles)
           .then((response) => {
+            const newRoles = response.data.roles;
             const updatedUsers = users.map((user) => {
                 if (user.email === email) {
                   return {
                     ...user,
-                    roles: selectedRoles
+                    roles: newRoles
                   };
                 }
                 console.log(selectedRoles);
@@ -120,7 +122,6 @@ function Users() {
       const indexOfLastOrder = currentPage * ordersPerPage;
       const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
       const currentUsers = users.slice(indexOfFirstOrder, indexOfLastOrder);
-      
   return (
     <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -135,10 +136,15 @@ function Users() {
                         <div className='row g-3 my-2'>
                         </div>
                     </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <Link to='/admin/user/create'>
+                    <button type="button" class="btn btn-primary">Thêm sản phẩm</button>
+                    </Link>
+                    </div>
                     {users && users.length > 0 ? (
                         <div>
                           <table className='table caption-top bg-white rounded mt-2' style={{ verticalAlign: 'middle' }}>
-                                <caption className='text-white fs-4'>Danh sách các đơn hàng</caption>
+                                <caption className='text-white fs-4'>Danh sách tài khoản</caption>
                                 <thead className="text-center">
                                     <tr>
                                     <th scope='col'>STT</th>
@@ -175,7 +181,6 @@ function Users() {
                                             {user.rank}
                                         </td>
                                         <td>
-                                            {/* {user.roles.length > 0 ? user.roles[0].name : 'No role'} */}
                                             {user.roles.length > 0 ? (user.roles.map((role,index) => (
                                             <span key={role.id}>
                                                 {role.name}
