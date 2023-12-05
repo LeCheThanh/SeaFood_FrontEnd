@@ -123,27 +123,14 @@ function Product() {
   const handleUpdateSubmit = async (id,event)=>{
     event.preventDefault();
     try {
-        // Kiểm tra nếu updatedVariantData không có sự thay đổi so với variantData
-      // const response = await AdminApiService.updateVariant(id,updatedVariantData);
       const response = await AdminApiService.updateProduct(id, {
         ...productData,
         ...productRequest,
       });
      
-      const updatedProduct = response.data;
-      // setVariantData(updatedVariant);
+    const updatedProduct = response.data;
     toast.success("Cập nhật sản phẩm thành công", { position: "top-right" });
   
-       // Cập nhật danh sách biến thể
-    // setGellAllProduct((prevProducts) => {
-    //   const updatedProducts = prevProducts.map((product) => {
-    //     if (product.id === updatedProduct.id) {
-    //       return updatedProduct;
-    //     }
-    //     return product;
-    //   });
-    //   return updatedProducts;
-    // });
     setGellAllProduct((prevProducts) => {
       const updatedProducts = prevProducts.map((product) => {
         if (product.id === updatedProduct.id) {
@@ -157,8 +144,7 @@ function Product() {
       return updatedProducts;
     });
          // Đóng modal
-         closeModalUpdate();
-         window.location.reload();
+    closeModalUpdate();
     } catch (error) {
       toast.error("Cập nhật thất bại", { position: "top-right" });
     }
