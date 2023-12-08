@@ -113,6 +113,19 @@ class AdminApiService{
     getUserById(id){
         return axios.get(ADMIN_API_BASE_URL+'/user/'+id);
     }
+    //thong ke theo product
+    statistics(){
+        return axios.get(ADMIN_API_BASE_URL+'/statistics');
+    }
+    getOrderByMethod(year, month, method){
+        return axios.get(ADMIN_API_BASE_URL+'/order/method',{
+            params:{
+                year: year,
+                month: month,
+                method: method
+            }
+        });
+    }
 
 }
 

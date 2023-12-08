@@ -3,10 +3,11 @@ import AdminApiService from '../../../service/AdminApiService';
 import Sidebar from '../Sidebar';
 import Nav from '../Nav';
 import { toast, ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { formatCurrency } from '../../../utils/formatCurrency';
 import { Button, Modal } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+
 
 function Users() {
     const [toggle, setToggle] = useState(true);
@@ -138,7 +139,7 @@ function Users() {
                     </div>
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                     <Link to='/admin/user/create'>
-                    <button type="button" class="btn btn-primary">Thêm sản phẩm</button>
+                    <button type="button" class="btn btn-primary">Thêm người dùng</button>
                     </Link>
                     </div>
                     {users && users.length > 0 ? (
