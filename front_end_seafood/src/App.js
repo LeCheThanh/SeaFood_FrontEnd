@@ -13,12 +13,22 @@ import Categories from './components/admin/category/Categories';
 import CreateCategory from './components/admin/category/CreateCategory';
 import Orders from './components/admin/order/Orders';
 import Users from './components/admin/user/Users';
+import CreateUser from './components/admin/user/CreateUser';
+import Revenue from './components/admin/revenue/Revenue';
+import Home from './components/Home';
+import Login from './components/Login';
 function App() {
   return (
   <div>
       <Router>
             <div>
               <Routes>
+                   <Route path="/" exact Component={Home}></Route>
+                   <Route path="/login" exact Component={Login}></Route>
+                   
+
+
+
                   <Route path="/admin" exact Component={Dashboard}></Route>
                   <Route path='/admin/dashboard'exact Component={Dashboard}></Route>
                   <Route path='/admin/products'exact Component={Product}></Route>
@@ -28,7 +38,9 @@ function App() {
                   <Route path='/admin/category/add-category'exact Component={CreateCategory}></Route>
                   <Route path='/admin/orders'exact Component={Orders}></Route>
                   <Route path='/admin/users'exact Component={Users}></Route>
+                  <Route path='/admin/user/create'exact Component={CreateUser}></Route>
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>
+                  <Route path='/admin/revenue'exact Component={Revenue}></Route>
                   <Route path='/register'exact Component={Register}></Route>
               </Routes>
             </div>
