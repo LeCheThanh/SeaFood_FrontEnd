@@ -1,16 +1,28 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import userApiService from "../service/UserApiService";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast styles
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useDispatch,useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { registerUser } from "../redux/apiRequest";
+import { Link } from "react-router-dom";
+
 const Register = () => {
+  const user = useSelector((state)=>state.auth.login?.currentUser);
+  useEffect(()=>{
+    if(user){
+      navigate("/");
+    }
+  })
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     confirmPassword:"",
   });
   const [message, setMessage] = useState("");
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -20,25 +32,25 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    registerUser(formData,dispatch,navigate);
     // Gửi yêu cầu đăng ký lên server
-    userApiService.register(formData)
-      .then((response) => {
-        // Xử lý phản hồi thành công từ server
-        setMessage(response.data);
-        // Hiển thị toast thành công
-        toast.success(response.data, { position: "top-right" });
-       // Chờ 5 giây rồi thực hiện chuyển hướng
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 2000); 
-      })
-      .catch((error) => {
-        // Xử lý lỗi từ server
-        setMessage(error.response.data);
-           // Hiển thị toast lỗi
-           toast.error(error.response.data, { position: "top-right" });
-      });
+    // userApiService.register(formData)
+    //   .then((response) => {
+    //     // Xử lý phản hồi thành công từ server
+    //     setMessage(response.data);
+    //     // Hiển thị toast thành công
+    //     toast.success(response.data, { position: "top-right" });
+    //    // Chờ 5 giây rồi thực hiện chuyển hướng
+    //     // setTimeout(() => {
+    //     //   window.location.href = '/login';
+    //     // }, 2000); 
+    //   })
+    //   .catch((error) => {
+    //     // Xử lý lỗi từ server
+    //     setMessage(error.response.data);
+    //        // Hiển thị toast lỗi
+    //        toast.error(error.response.data, { position: "top-right" });
+    //   });
   };
   return (
     <div className="container mt-5">
@@ -63,7 +75,7 @@ const Register = () => {
               <button type="submit" className="btn btn-primary w-100">Đăng ký</button>
             </form>
             <div className="mt-3">
-              <p className="text-center">Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+              <p className="text-center">Đã có tài khoản? <Link to="/login">Đăng nhập</Link></p>
             </div>
           </div>
         </div>
