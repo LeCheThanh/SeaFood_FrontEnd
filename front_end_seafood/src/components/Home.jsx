@@ -1,17 +1,21 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Header from './Header';
+import Footer from './Footer';
 import './styles.css'
 import img from '../images/tau_2.jpg'
 import img2 from '../images/xu-ly-hai-san-truoc-khi-bao-quan-va-cach-bao-quan-hai-san-avt-1200x676.jpg';
 import img3 from '../images/20210701_ZaWNLvrIitzEfF8McdJGngDu.jpg'
-import Footer from './Footer';
 import img4 from '../images/free-shipping.png';
 import img5 from '../images/help-desk.png';
 import img6 from '../images/root-cause.png';
 import img7 from '../images/reputation-management.png';
 import SwiperPage from './SwiperPage';
+import UserApiService from '../service/UserApiService';
+import { useSelector } from 'react-redux';
+import { toast, ToastContainer } from "react-toastify";
 
 function Home() {
+ 
   return (
     <div>
      <Header></Header>
@@ -95,6 +99,7 @@ function Home() {
      <div className='footer'>
         <Footer></Footer>
      </div>
+     <ToastContainer></ToastContainer>
     </div>
   );
 }
