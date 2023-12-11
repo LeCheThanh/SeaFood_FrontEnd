@@ -1,5 +1,5 @@
 import axios from "axios";
-import { loginFailed, loginStart, loginSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
+import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logoutSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
 import UserApiService from "../service/UserApiService";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -29,3 +29,14 @@ export const registerUser = async (user,dispatch,navigate)=> {
         toast.error(err.response.data, { position: "top-right" });
     }
 };
+export const logOutUser = async(dispatch,navigate)=>{
+    dispatch(logoutStart());
+    try{
+
+        await localStorage.removeItem('persist:root');
+        dispatch(logoutSuccess());
+    }catch(err){
+        dispatch(logoutFailed());
+    }
+
+}
