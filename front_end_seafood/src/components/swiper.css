@@ -1,0 +1,14 @@
+.variant-card {
+    cursor: pointer;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .selected-variant {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+  
+  .variant-name p {
+    margin: 0;
+  }

@@ -1,0 +1,11 @@
+:root {
+    --primaryColor: rgba(3, 194, 252, 0.982);
+  }
+.title-home{
+    color: var(--primaryColor);
+    margin: 30px;
+}
+
+.card .poly{
+  width: 100px;
+}

@@ -1,0 +1,45 @@
+.wishlist-icon {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 10px;
+  }
+  
+  .wishlist-count {
+    position: absolute;
+    text-align: center;
+    top: -8px;
+    right: -8px;
+    background-color: #ff0000;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 2px;
+    font-size: 9px;
+    width: 16px; 
+    height: 16px;
+  }
+  .user-icon{
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 10px;
+  }
+  .cart-icon{
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    margin-left: 10px;
+  }
+  .cart-count {
+    position: absolute;
+    text-align: center;
+    top: -8px;
+    right: -8px;
+    background-color: #ff0000;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 2px;
+    font-size: 9px;
+    width: 16px; 
+    height: 16px;
+  }
