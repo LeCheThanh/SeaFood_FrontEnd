@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useState ,useEffect} from 'react'
 import 'bootstrap/js/dist/dropdown'
+import UserApiService from '../../service/UserApiService';
+import axios from 'axios';
 
 function Nav({Toggle}) {
   return (
@@ -11,7 +13,7 @@ function Nav({Toggle}) {
     {/* <div className="collapse navbar-collapse" id="collapsibleNavId">
         <ul className="navbar-nav ms-auto mt-2 mt-lg-0">
             <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle text-white" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Yousof </a>
+                <a className="nav-link dropdown-toggle text-white" href="#" id="dropdownId" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{name} </a>
                 <div className="dropdown-menu" aria-labelledby="dropdownId">
                     <a className="dropdown-item" href="#">Profile</a>
                     <a className="dropdown-item" href="#">Setting</a>
