@@ -2,6 +2,7 @@ import axios from "axios";
 import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logoutSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
 import UserApiService from "../service/UserApiService";
 import { toast, ToastContainer } from "react-toastify";
+import { addToCartFailed, addToCartStart, addToCartSuccess } from "./cartSlice";
 
 export const loginUser = async (user,dispatch,navigate)=>{
     dispatch(loginStart());
@@ -39,4 +40,22 @@ export const logOutUser = async(dispatch,navigate)=>{
         dispatch(logoutFailed());
     }
 
+}
+export const addToCart = async(dispatch,data,token)=>{
+    dispatch(addToCartStart());
+    try{
+        console.log("Making API call with:", data);
+        //  const response = await UserApiService.addToCart(data,token);
+        const response = await axios.post("http://localhost:8080/api/cart/add",data,{
+            headers: {
+                Authorization: `Bearer ${token}` // Gửi chuỗi token trong header Authorization
+              }
+        })
+         dispatch(addToCartSuccess());
+         toast.success(response.data, { position: "top-right" });
+
+    }catch(err){
+        dispatch(addToCartFailed());
+        toast.error(err.response?.data, { position: "top-right" });
+    }
 }
