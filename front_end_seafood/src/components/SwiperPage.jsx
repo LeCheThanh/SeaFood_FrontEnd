@@ -10,7 +10,7 @@ import { formatCurrency } from '../utils/formatCurrency';
 import './swiper.css'
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from "react-toastify";
-import { addToCart } from '../redux/apiRequest';
+import { addToCart, getCart  } from '../redux/apiRequest';
 
 function SwiperPage() {
   const [topSelling, setTopSelling] = useState([]);
@@ -81,6 +81,7 @@ const handleVariantClick = (variant) => {
     try{
       const response = await UserApiService.addToWishList(id,token);
       toast.success("Thêm vào danh sách yêu thích thành công", { position: "top-right" });
+      window.location.reload();
     }catch(err){
       console.log(err);
       if(user){
@@ -103,9 +104,10 @@ const handleVariantClick = (variant) => {
   }
   const dispatch = useDispatch();
   const handleSubmitAddToCart = (e)=>{
-    e.preventDefault();
+    // e.preventDefault();
     console.log("Submitting:", cartItemRequest);
-    // addToCart(dispatch,cartItemRequest,token);
+    addToCart(dispatch,cartItemRequest,token);
+    
     if(!user){
       toast.error("vui lòng đăng nhập để thêm vào giỏ hàng", { position: "top-right" });
     }
@@ -156,7 +158,7 @@ const handleVariantClick = (variant) => {
               <h6>{selectedVariant.product.name}</h6>
               <p>Mô tả: {selectedVariant.product.description}</p>
               <p>Giá: {formatCurrency(selectedVariant.price, 'VND')}</p>              
-              {variants.length > 0 ? (
+              {variants?.length > 0 ? (
                 <ul className="list-group list-group-horizontal">
                   {variants.map((variant) => ( 
                     <li
