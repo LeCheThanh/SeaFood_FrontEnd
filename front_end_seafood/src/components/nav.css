@@ -43,3 +43,78 @@
     width: 16px; 
     height: 16px;
   }
+  .popover-content {
+    max-height: 300px; /* Đặt chiều cao tối đa cho phần nội dung của popover */
+    max-width: 400px;
+    overflow-y: auto; /* Kích hoạt cuộn khi nội dung vượt quá kích thước */
+  }
+  
+  .popover-item {
+    margin-bottom: 10px;
+  }
+  
+  .product-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .product-info p {
+    margin-bottom: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .product-info button {
+    flex-shrink: 0;
+    margin-left: 20px;
+  } 
+  .search-container {
+    position: relative;
+    width: 100%; 
+    max-width: 500px; 
+    margin: auto;
+  }
+  
+  .search-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .search-container .search-results {
+    position: absolute;
+    width: 100%;
+    background: rgb(255,255,255,0.7);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    z-index: 1000; 
+    max-height: 300px; 
+    overflow-y: auto;
+  }
+  
+  .search-container .search-results li {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .search-container .search-results li:last-child {
+    border-bottom: none;
+  }
+  
+  .search-container .search-results img {
+    max-width: 100%;
+    height: auto;
+  }
+  .nav-link.active {
+    /* Kiểu cho trạng thái active */
+    /* background-color: rgba(3, 194, 252, 0.982); */
+    color: rgba(3, 194, 252, 0.982)!important;
+    text-decoration: overline;
+
+  }

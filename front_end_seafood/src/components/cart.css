@@ -1,0 +1,4 @@
+.card-cart-container{
+    max-height: 500px; /* Đặt chiều cao tối đa cho phần nội dung của popover */
+    overflow-y: auto;
+}
