@@ -140,7 +140,8 @@ function Orders() {
                                         <td>{formatDate(order.createdAt)}</td>
                                         {/* <td>{formatDate(order.updateAt)}</td>  */}
                                         <td>
-                                            <button class="btn btn-outline-primary" onClick={() => handleOrderDetail(order.id)}><i class="bi bi-eye-fill"></i></button></td>
+                                            <button class="btn btn-outline-primary" onClick={() => handleOrderDetail(order.id)}><i class="bi bi-eye-fill"></i></button>
+                                        </td>
                                     </tr>
                                     ))}
                                 </tbody>
@@ -193,7 +194,7 @@ function Orders() {
                                   <div className="card-body">
                                     <h5 className="card-title">Tên sản phẩm: {detail.productVariantName}</h5>
                                     <p className="card-text">Số lượng: {detail.quantity}</p>
-                                    <p className="card-text">Tổng tiền: {formatCurrency(detail.price,'VND')}</p>
+                                    <p className="card-text">Giá: {formatCurrency(detail.price,'VND')}</p>
                                   </div>
                                 </div>
                               ))}
