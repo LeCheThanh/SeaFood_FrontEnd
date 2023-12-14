@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { handleImageChange } from '../../../utils/handleImageChange';
 import { handleVariantImageChange } from '../../../utils/handleVariantImageChange';
 import './style.css'
+
 function CreateProduct() {
   const [toggle, setToggle] = useState(true);
   const Toggle = ()=>{
