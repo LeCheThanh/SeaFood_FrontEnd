@@ -17,6 +17,13 @@ import CreateUser from './components/admin/user/CreateUser';
 import Revenue from './components/admin/revenue/Revenue';
 import Home from './components/Home';
 import Login from './components/Login';
+import ProductPage from './components/ProductPage';
+import CartPage from './components/CartPage';
+import ProductDetailPage from './components/ProductDetailPage';
+import UserPage from './components/UserPage';
+import CheckOut from './components/CheckOut';
+import OrderSuccess from './components/OrderSuccess';
+import NotFound from './components/NotFound';
 function App() {
   return (
   <div>
@@ -25,9 +32,12 @@ function App() {
               <Routes>
                    <Route path="/" exact Component={Home}></Route>
                    <Route path="/login" exact Component={Login}></Route>
-                   
-
-
+                   <Route path="/products" exact Component={ProductPage}></Route>
+                   <Route path="/cart" exact Component={CartPage}></Route>
+                   <Route path="/product/:slug" exact Component={ProductDetailPage}></Route>
+                   <Route path="/user/info" exact Component={UserPage}></Route>
+                   <Route path="/checkout" exact Component={CheckOut}></Route>
+                   <Route path="/order/success" exact Component={OrderSuccess}></Route>
 
                   <Route path="/admin" exact Component={Dashboard}></Route>
                   <Route path='/admin/dashboard'exact Component={Dashboard}></Route>
@@ -42,6 +52,9 @@ function App() {
                   <Route path='/admin/login'exact Component={AdminLogin}></Route>
                   <Route path='/admin/revenue'exact Component={Revenue}></Route>
                   <Route path='/register'exact Component={Register}></Route>
+
+
+                  <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
     </Router>
