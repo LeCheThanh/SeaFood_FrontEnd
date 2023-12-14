@@ -126,6 +126,8 @@ class AdminApiService{
             }
         });
     }
+    //auth
+    
 
 }
 
