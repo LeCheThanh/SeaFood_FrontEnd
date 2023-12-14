@@ -2,7 +2,9 @@ import axios from "axios";
 import { loginFailed, loginStart, loginSuccess, logoutFailed, logoutStart, logoutSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
 import UserApiService from "../service/UserApiService";
 import { toast, ToastContainer } from "react-toastify";
-import { addToCartFailed, addToCartStart, addToCartSuccess } from "./cartSlice";
+import { addToCartFailed, addToCartStart, addToCartSuccess, 
+    getCartStart,getCartFailed,getCartSuccess,
+    deleteItemFailed,deleteItemStart,deleteItemSuccess } from "./cartSlice";
 
 export const loginUser = async (user,dispatch,navigate)=>{
     dispatch(loginStart());
@@ -52,10 +54,37 @@ export const addToCart = async(dispatch,data,token)=>{
               }
         })
          dispatch(addToCartSuccess());
+         setTimeout(() => {
+            window.location.reload();
+          }, 2000);
          toast.success(response.data, { position: "top-right" });
 
     }catch(err){
         dispatch(addToCartFailed());
         toast.error(err.response?.data, { position: "top-right" });
+    }
+}
+export const getCart = async(dispatch,token)=>{
+    dispatch(getCartStart());
+    try{
+        const response = await UserApiService.getCart(token);
+        return response.data;
+        dispatch(getCartSuccess(response.data));
+        
+    }catch(err){
+        dispatch(getCartFailed());
+        console.log(err);
+    }
+}
+export const deleteItem = async(dispatch,token,id)=>{
+    dispatch(deleteItemStart());
+    try{
+        const response = await UserApiService.delCartItem(token,id);
+        toast.success('Xóa ra khỏi giỏ hàng thành công!', { position: "top-right" });
+        dispatch(deleteItemSuccess());
+
+    }catch(err){
+        dispatch(deleteItemFailed());
+        console.log(err);
     }
 }
