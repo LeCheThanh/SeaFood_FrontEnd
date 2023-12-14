@@ -3,9 +3,11 @@ import Footer from './Footer';
 import NavBarPage from './NavBarPage';
 import {Link, useNavigate} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCart } from '../redux/apiRequest';
+import { getCart,deleteItem } from '../redux/apiRequest';
 import UserApiService from '../service/UserApiService';
 import { formatCurrency } from '../utils/formatCurrency';
+import { toast, ToastContainer } from "react-toastify";
+import './cart.css'
 
 function CartPage() {
     const user = useSelector((state)=>state.auth.login?.currentUser);
@@ -38,6 +40,52 @@ function CartPage() {
             // Xử lý lỗi nếu có
           });
       };
+      const [newQuantity, setNewQuantity] = useState(0);
+      const handleUpdateCartItem = async (cartItemId) => {
+        const cartItem = cartItems.find((item) => item.id === cartItemId);
+        const updateRequest = {
+          cartItemId: cartItemId,
+          newQuantity: cartItem.quantity,
+        };
+      
+        try {
+          console.log(updateRequest);
+          const response = await UserApiService.updateCart(token,updateRequest);
+          fetchCart();
+          fetchTotal();
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      const handleQuantityChange = (cartItemId, quantity) => {
+        // Find the index of the cart item
+        const index = cartItems.findIndex((item) => item.id === cartItemId);
+        // Create a new array with the updated item
+        const newCartItems = [...cartItems];
+        newCartItems[index] = {
+          ...newCartItems[index],
+          quantity: quantity,
+        };
+        // Update the state with the new cart items array
+        setCartItems(newCartItems);
+        // Update the newQuantity state if needed
+        setNewQuantity(quantity);
+      };
+      const handleCartItemDelete = async(id)=>{
+        await deleteItem(dispatch,token,id);
+        fetchCart();
+        fetchTotal();
+       }
+       const handleClearCart = async ()=>{
+        try{
+            await UserApiService.clearCart(token);
+            toast.success('Xóa toàn bộ giỏ hàng thành công!', { position: "top-right" });
+            fetchCart();
+            fetchTotal();
+        }catch(err){
+            console.log(err);
+        }
+       }
   return (
     <div>
         <NavBarPage></NavBarPage>
@@ -55,14 +103,15 @@ function CartPage() {
       
         { user ? (
         <div class="container mt-4 shadow" style={{marginBottom: '100px'}}>
+            <Link to='/'>Quay lại</Link>
             {cartItems?.length>0?(
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 card-cart-container">
                 {cartItems && cartItems?.map((cart, index) => (
-                    <div class="card mb-3">
+                    <div class="card mb-3" key={cart.id}>
                         <div class="row no-gutters ">
                             <div class="col-md-4 position-relative">
-                            <img src="https://i.imgur.com/qA6jkFf.jpg" class="card-img-top" alt="Abalone" style={{width:'110px',height:'110px'}}/>
+                            <img src={cart.productVariant.image} class="card-img-top" alt="Abalone" style={{width:'110px',height:'110px'}}/>
                             </div>
                             <div class="col-md-8">
                             <div class="card-body ">
@@ -73,30 +122,52 @@ function CartPage() {
                                     <p class="card-text">giá: {formatCurrency(cart.productVariant.price,'VND')}</p>
                                     <p class="card-text">giá sỉ: {formatCurrency(cart.productVariant.whosalePrice,'VND')}</p>
                                 </div>
-                            <div class="col-4">
+                                <div class="col-4">
                                 <div class="">
-                                    <button class="btn btn-danger btn-sm position-absolute bottom-0 end-0">
+                                    <button class="btn btn-danger btn-sm position-absolute bottom-0 end-0" onClick={()=>handleCartItemDelete(cart.id)}>
                                     <i class="bi bi-trash"></i>
                                     </button>
-                                    <input type="number" class="form-control mb-2" value={cart.quantity} />
+                                    <input
+                                        min="1"
+                                        type="number"
+                                        className="form-control mb-2"
+                                        value={cart.quantity}
+                                        onChange={(e) => {
+                                            const quantity = parseInt(e.target.value, 10);
+                                            if (!isNaN(quantity) && quantity >= 1) {
+                                            handleQuantityChange(cart.id, quantity);
+                                            }
+                                        }}
+                                        />
                                 </div>
                                 <span class="d-block mt-2">{formatCurrency(cart.total,'VND')}</span>
                                 </div>
                                 </div>
                             </div>
                             </div>
+                           <div className='col-12 text-center'>
+                            <button
+                                type="button"
+                                className="btn btn-outline-primary"
+                                onClick={() => handleUpdateCartItem(cart.id)}
+                                >
+                                Cập nhật
+                                </button>
+                           </div>
+                     
                         </div>
                         </div>
+                       
                            ))}
-                        <Link to='/'>Quay lại</Link>
-                </div>
+                      </div>
                         <div class="col-md-6">
                     <p class="h4">Tổng giỏ hàng: {formatCurrency(totalCart,'VND')}</p>
                     <div class="row">
-                        <div class="col-6">
-                        <form>
-                            <button type="submit" class="btn btn-outline-primary w-100">Cập nhật</button>
-                        </form>
+                        <div class="col-6">    
+                        <button 
+                        type="submit" 
+                        class="btn btn-outline-danger w-100"
+                        onClick={()=>handleClearCart()}>Xóa toàn bộ giỏ hàng</button>       
                         </div>
                         <div class="col-6 text-right">
                         <Link to='/checkout' className='' >
@@ -116,8 +187,10 @@ function CartPage() {
                         </div>
                     )}
 
-
-        <Footer></Footer>
+        <ToastContainer></ToastContainer>
+        <div className='footer'>
+      <Footer></Footer>
+      </div>
     </div>
   )
 }
