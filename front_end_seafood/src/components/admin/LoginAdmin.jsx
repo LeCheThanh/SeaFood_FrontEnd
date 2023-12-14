@@ -20,10 +20,12 @@ const AdminLogin = () => {
       });
 
       // Lưu token vào header
-      if (response && response.data && response.data.token) {
-        const token = response.data.token;
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      if (response && response.data && response.data?.token) {
+        const token = response.data?.token;
+        localStorage.setItem('token', token);
+        // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       // Kiểm tra phản hồi từ server và thực hiện các hành động tương ứng
+      toast.success("Đăng nhập thành công", { position: "top-right" });
     } else {
         throw new Error('Phản hồi không hợp lệ');
       }
@@ -36,36 +38,6 @@ const AdminLogin = () => {
 
   return (
     <div className='container-fluid min-vh-100 main-bg '>
-    {/* <h4>Đăng nhập quản trị viên</h4>
-    <div className='row justify-content-center mt-5'>
-      <div className='col-lg-4 col-md-6 col-sm-6'>
-        <div className='card-shadow'>
-        </div>
-        <div className='card-body'>
-          {errorMessage && <p>{errorMessage}</p>}
-          <form onSubmit={handleLogin}>
-            <div>
-              <label>Email:</label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </div>
-            <div>
-              <label>Mật khẩu:</label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            <button type="submit">Đăng nhập</button>
-          </form> 
-          <ToastContainer />
-          </div>
-      </div>
-    </div> */}
     <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-4 col-md-6 col-sm-6">
