@@ -81,7 +81,10 @@ const handleVariantClick = (variant) => {
     try{
       const response = await UserApiService.addToWishList(id,token);
       toast.success("Thêm vào danh sách yêu thích thành công", { position: "top-right" });
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+     
     }catch(err){
       console.log(err);
       if(user){
@@ -104,10 +107,10 @@ const handleVariantClick = (variant) => {
   }
   const dispatch = useDispatch();
   const handleSubmitAddToCart = (e)=>{
-    // e.preventDefault();
+    e.preventDefault();
     console.log("Submitting:", cartItemRequest);
     addToCart(dispatch,cartItemRequest,token);
-    
+
     if(!user){
       toast.error("vui lòng đăng nhập để thêm vào giỏ hàng", { position: "top-right" });
     }
@@ -121,10 +124,12 @@ const handleVariantClick = (variant) => {
       onSlideChange={() => console.log('slide change')}
       onSwiper={(swiper) => console.log(swiper)}
     >
-       {topSelling.map(product => (
+      {topSelling.map(product => (
       <SwiperSlide key={product.id}>
-        <div className="card shadow border-0" style={{ width: '18rem', padding: '20px' }}>
+        <div className=" product-card  card shadow border-0" style={{ width: '18rem', padding: '20px' }}>
+        <Link to={`/product/${product.slug}`} style={{textDecoration:'none'}}>
           <img src={product.image} className="card-img-top" alt={product.title} style={{ height: '250px'}}/>
+          </Link>
           <div className="card-body text-center">
             <h5 className="card-title">{product.name}</h5>
             <p className="card-text">{product.price}</p>
