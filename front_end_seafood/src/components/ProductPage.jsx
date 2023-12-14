@@ -108,7 +108,7 @@ const handleVariantClick = (variant) => {
   }
   const dispatch = useDispatch();
   const handleSubmitAddToCart = (e)=>{
-    // e.preventDefault();
+    e.preventDefault();
     console.log("Submitting:", cartItemRequest);
     addToCart(dispatch,cartItemRequest,token);
     
@@ -182,12 +182,14 @@ const handleVariantClick = (variant) => {
             </div>
             {products && products.length > 0 ? (
             <div className="col-md-9">
-              
+                   
                   <div className="row">
                       {currentProducts.map((product) => (
                           <div className="col-md-4 mb-4" key={product.id}>
                           <div className="card h-100 shadow-sm product-card">
+                          <Link to={`/product/${product.slug}`} style={{textDecoration:'none'}}>
                               <img className="card-img-top" src={product.image || "https://via.placeholder.com/150"} alt={`Sản phẩm ${product.name}`} style={{ height: '200px', objectFit: 'cover' }} />
+                          </Link>
                               <div className="card-body">
                                   <h5 className="card-title">{product.name}</h5>
                                   <p className="card-text">{product.description}</p>
@@ -202,6 +204,7 @@ const handleVariantClick = (variant) => {
                                 </button> 
                                   </div>
                               </div>
+                           
                           </div>
                       </div>
                       ))}
@@ -247,47 +250,47 @@ const handleVariantClick = (variant) => {
         {showModal && (
         <Modal className="" show={showModal} onHide={closeModal}>
         <Modal.Header closeButton></Modal.Header>
-    <Modal.Body>
-      {selectedVariant && (
-        <Form onSubmit={handleSubmitAddToCart}>
-          <div className="container">
-            <div className="row">
-          <div className="col">
-            <img className="img-thumbnail" src={selectedVariant.image} alt="" style={{ width: '200px', height: '200px' }} />
-          </div>
-          <div className="col">
-            <>
-              <h6>{selectedVariant.product.name}</h6>
-              <p>Mô tả: {selectedVariant.product.description}</p>
-              <p>Giá: {formatCurrency(selectedVariant.price, 'VND')}</p>              
-              {variants?.length > 0 ? (
-                <ul className="list-group list-group-horizontal">
-                  {variants.map((variant) => ( 
-                    <li
-                      key={variant.id}
-                      className={`list-group-item border-1 rounded ${variant === selectedVariant ? 'selected-variant' : ''}`}
-                      onClick={() => handleVariantClick(variant)}
-                      style={{ fontSize: '15px', marginRight: '5px', padding: '5px' }}
-                    >
-                      {variant.name}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <div>Không có biến thể nào của sản phẩm</div>
-              )}
-            </>
-            <Form.Group controlId="quantity" className='mt-2'>
-              <Form.Label>Số lượng:</Form.Label>
-              <Form.Control
-                type="number"
-                min={1}
-                value={quantity}
-                onChange={handleQuantityChange}
-                className='rounded'
-              />
-            </Form.Group>
-          </div>
+                <Modal.Body>
+                  {selectedVariant && (
+                    <Form onSubmit={handleSubmitAddToCart}>
+                      <div className="container">
+                        <div className="row">
+                      <div className="col">
+                        <img className="img-thumbnail" src={selectedVariant.image} alt="" style={{ width: '200px', height: '200px' }} />
+                      </div>
+                      <div className="col">
+                        <>
+                          <h6>{selectedVariant.product.name}</h6>
+                          <p>Mô tả: {selectedVariant.product.description}</p>
+                          <p>Giá: {formatCurrency(selectedVariant.price, 'VND')}</p>              
+                          {variants?.length > 0 ? (
+                            <ul className="list-group list-group-horizontal">
+                              {variants.map((variant) => ( 
+                                <li
+                                  key={variant.id}
+                                  className={`list-group-item border-1 rounded ${variant === selectedVariant ? 'selected-variant' : ''}`}
+                                  onClick={() => handleVariantClick(variant)}
+                                  style={{ fontSize: '15px', marginRight: '5px', padding: '5px' }}
+                                >
+                                  {variant.name}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <div>Không có biến thể nào của sản phẩm</div>
+                          )}
+                        </>
+                        <Form.Group controlId="quantity" className='mt-2'>
+                          <Form.Label>Số lượng:</Form.Label>
+                          <Form.Control
+                            type="number"
+                            min={1}
+                            value={quantity}
+                            onChange={handleQuantityChange}
+                            className='rounded'
+                          />
+                        </Form.Group>
+                      </div>
                       </div>
                     </div>
                     <Button type="submit">Thêm vào giỏ hàng</Button>
@@ -296,10 +299,8 @@ const handleVariantClick = (variant) => {
               </Modal.Body>
                   </Modal>
           )}
-  <ToastContainer/>
     </div>
-   
-      
+    <ToastContainer/>
       </div>
       <div className='footer'>
       <Footer></Footer>
