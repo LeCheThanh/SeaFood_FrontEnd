@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Modal } from 'react-bootstrap';
 import { formatCurrency } from '../../../utils/formatCurrency';   
 import UtilsApiService from "../../../service/UtilsApiService";
+
 function Product() {
     const [toggle, setToggle] = useState(true);
     const Toggle = ()=>{
@@ -137,6 +138,12 @@ function Product() {
           return {
             ...product,
             category: updatedProduct.category,
+            name: updatedProduct.name,
+            slug: updatedProduct.slug,
+            description: updatedProduct.description,
+            updateAt: updatedProduct.updateAt,
+            image : updatedProduct.image
+
           };
         }
         return product;

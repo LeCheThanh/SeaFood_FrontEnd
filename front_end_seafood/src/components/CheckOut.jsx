@@ -61,7 +61,7 @@ function CheckOut() {
         } else if (userData.rank === 'Silver') {
             discount = '10%';
         }else{
-            discount = '5%';
+            discount = '0%';
         }
         return discount;
     }
@@ -98,13 +98,17 @@ function CheckOut() {
         event.preventDefault();
         try {
             const response = await UserApiService.createOrder(token, orderRequest);
-            console.log(orderRequest);
             toast.success('Đặt hàng thành công!', { position: "top-right" });
+            if(paymentMethod === 'momo' || paymentMethod==='vnpay'){
+                window.location.href = response.data;
+            }
             // Xử lý phản hồi sau khi gửi đơn hàng
-            setTimeout(()=>{
+            else{setTimeout(()=>{
                 navigate('/order/success',3000);
             })
+        }
         } catch (err) {
+            toast.error(err.response.data, { position: "top-right" });
             console.log(err);
         }
     };
@@ -166,7 +170,7 @@ function CheckOut() {
                                 </div>
                                 <div className="form-group">
                                     <label htmlFor="note">Ghi chú</label>
-                                    <input type="text" className="form-control" id="note" name='note' placeholder="Ghi chú" required value={orderRequest.note || ''}  onChange={handleInputChange}/>
+                                    <input type="text" className="form-control" id="note" name='note' placeholder="Ghi chú" value={orderRequest.note || ''}  onChange={handleInputChange}/>
                                 </div>
                                 
                                 <div className="form-group">
@@ -188,6 +192,9 @@ function CheckOut() {
                                         <label className="form-check-label" htmlFor="vnpay">
                                             VNPay
                                         </label>
+                                    </div>
+                                    <div className='text-center'>
+
                                         <button type="submit" className="btn btn-success">Thanh Toán</button>
                                     </div>
                                 </div>
@@ -212,8 +219,10 @@ function CheckOut() {
                                                 <small className="text-body-secondary">{cartItem.productVariant.description}</small>
                                             </div>
                                         </div>
-                                        <span className="text-body-secondary">{formatCurrency(cartItem.productVariant.price,'VND')}</span>
-                                        <small className="text-body-secondary">{formatCurrency(cartItem.productVariant.whosalePrice,'VND')}</small>
+                                        <span>x{cartItem.quantity}</span>
+                                        {userData.wholeSale ? 
+                                        ( <span className="text-body-secondary">{formatCurrency(cartItem.productVariant.whosalePrice,'VND')}</span>) : 
+                                        (<span className="text-body-secondary">{formatCurrency(cartItem.productVariant.price,'VND')}</span>) }
                                     </li>
                                 ))}
                                 <li className="list-group-item d-flex justify-content-between">
@@ -229,9 +238,9 @@ function CheckOut() {
                                     <strong>{formatCurrency(discountedTotal,'VND')}</strong>
                                 </li>   
                             </ul>
-                            <div className="text-center mt-4">
+                            {/* <div className="text-center mt-4">
                                 <button className="btn btn-success">Thanh Toán</button>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 )}
