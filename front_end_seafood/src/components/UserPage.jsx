@@ -116,7 +116,7 @@ function UserPage() {
         } else if (userData.rank === 'Silver') {
             discount = '10%';
         }else{
-            discount = '5%';
+            discount = '0%';
         }
         return discount;
     }
@@ -303,7 +303,7 @@ function UserPage() {
                               {orderDetails.map((detail) => (
                                 <div key={detail.id} className="card">
                                   <div className="card-body">
-                                    <h5 className="card-title">Tên sản phẩm: {detail.productVariantName}</h5>
+                                    <h5 className="card-title"> {detail.productName}/{detail.productVariantName}</h5>
                                     <p className="card-text">Số lượng: {detail.quantity}</p>
                                     <p className="card-text">Giá: {formatCurrency(detail.price,'VND')}</p>
                                   </div>

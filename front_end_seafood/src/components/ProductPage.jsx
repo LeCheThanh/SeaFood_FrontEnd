@@ -198,7 +198,6 @@ const handleVariantClick = (variant) => {
                                   <button style={{marginRight: '10px',fontSize: '20px'}} className="btn btn-outline-primary border-0" onClick={() =>getVariants(product.id)}>
                                     <i className="bi bi-cart-plus"></i>
                                   </button>
-
                                 <button style={{marginLeft: '10px',fontSize: '20px'}} className="btn btn-outline-danger border-0" onClick={()=>handleAddToWL(product.id)}>
                                   <i className="bi bi-heart-fill"></i>
                                 </button> 

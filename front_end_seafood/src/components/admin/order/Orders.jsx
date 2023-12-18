@@ -7,6 +7,7 @@ import Nav from '../Nav';
 import { toast, ToastContainer } from "react-toastify";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Modal } from 'react-bootstrap';
+import axios from 'axios';
 
 function Orders() {
     const [toggle, setToggle] = useState(true);
@@ -76,6 +77,60 @@ function Orders() {
         })
         .catch(error=>toast.error("Không có chi tiết", { position: "top-right" }));
       }
+        // const handleExportExcel = async ()=>{
+        //   try{
+        //     const response = await AdminApiService.exportExcel({ responseType: 'blob' });
+        //     console.log(response.data)
+        //     toast.success("Tải xuống file Excel thành công!", { position: "top-right" });
+
+        //   }catch(err){
+        //     console.log(err);
+        //     toast.error(err.response?.data, { position: "top-right" });
+        //   }
+        // }
+        const handleExportExcel = async () => {
+          try {
+              // Gọi API và chỉ định rằng phản hồi nên được xử lý như một blob
+              const response = await AdminApiService.exportExcel();
+      
+              // Tạo một URL từ blob
+              const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }));
+      
+              // Tạo thẻ <a> để tải file
+              const link = document.createElement('a');
+              link.href = url;
+      
+              // Đặt tên file từ header 'Content-Disposition' nếu có, nếu không thì dùng tên mặc định
+              const contentDisposition = response.headers['content-disposition'];
+              console.log(contentDisposition);
+              let filename = 'download.xlsx'; // Tên mặc định, sẽ được thay thế nếu Content-Disposition có mặt
+              if (contentDisposition) {
+                  const filenameMatch = contentDisposition.match(/filename="?([^";]+)"?/);
+                  if (filenameMatch.length > 1) {
+                      filename = filenameMatch[1];
+                  }
+              }
+      
+              link.setAttribute('download', filename);
+      
+              // Kích hoạt tải file
+              document.body.appendChild(link);
+              link.click();
+      
+              // Dọn dẹp sau khi tải xuống
+              document.body.removeChild(link);
+              window.URL.revokeObjectURL(url);
+      
+              // Hiển thị thông báo thành công
+              toast.success("Tải xuống file Excel thành công!", { position: "top-right" });
+          } catch (err) {
+              console.error(err);
+              // Hiển thị thông báo lỗi
+              toast.error("Không thể tải xuống file Excel.", { position: "top-right" });
+          }
+      }
+      
+      
   return (
      <div className='container-fluid bg-secondary min-vh-100'>
         <div className='row'>
@@ -89,9 +144,13 @@ function Orders() {
                     <div className='container-fluid'>
                         <div className='row g-3 my-2'>
                         </div>
-                    </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                          <button type="button" class="btn btn-success border-0" onClick={handleExportExcel} >Tải xuống toàn bộ order <i class="bi bi-file-earmark-excel-fill"></i></button>
+                        </div>
+                        </div>
                     {orders && orders.length > 0 ? (
                         <div>
+                          
                           <table className='table caption-top bg-white rounded mt-2' style={{ verticalAlign: 'middle' }}>
                                 <caption className='text-white fs-4'>Danh sách các đơn hàng</caption>
                                 <thead className="text-center">

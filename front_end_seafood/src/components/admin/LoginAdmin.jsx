@@ -4,12 +4,13 @@ import { toast, ToastContainer } from "react-toastify";
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
  import './login.css';
+import { useNavigate } from 'react-router-dom';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
+  const navigate = useNavigate();
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -26,13 +27,16 @@ const AdminLogin = () => {
         // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       // Kiểm tra phản hồi từ server và thực hiện các hành động tương ứng
       toast.success("Đăng nhập thành công", { position: "top-right" });
+      setTimeout(()=>{
+        navigate('/admin',2000)
+      })
     } else {
         throw new Error('Phản hồi không hợp lệ');
       }
       // Ví dụ: chuyển hướng đến trang quản trị
 
     } catch (error) {
-      toast.error(error.response.data.message, { position: "top-right" });
+      toast.error(error.response.data?.message, { position: "top-right" });
     }
   };
 

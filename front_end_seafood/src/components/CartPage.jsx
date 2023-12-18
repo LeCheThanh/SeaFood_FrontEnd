@@ -110,9 +110,11 @@ function CartPage() {
                 {cartItems && cartItems?.map((cart, index) => (
                     <div class="card mb-3" key={cart.id}>
                         <div class="row no-gutters ">
+                          <Link to={`/product/${cart.product.slug}`}>
                             <div class="col-md-4 position-relative">
                             <img src={cart.productVariant.image} class="card-img-top" alt="Abalone" style={{width:'110px',height:'110px'}}/>
                             </div>
+                            </Link>
                             <div class="col-md-8">
                             <div class="card-body ">
                                 <div class="row">
