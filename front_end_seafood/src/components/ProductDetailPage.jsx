@@ -8,6 +8,8 @@ import { formatCurrency } from '../utils/formatCurrency';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from "react-toastify";
 import { addToCart } from '../redux/apiRequest';
+import userimg from '../images/user1.jpg'
+import StarRatingInput from './StarRatingInput';
 
 function ProductDetailPage() {
     const { slug } = useParams();
@@ -20,6 +22,9 @@ function ProductDetailPage() {
     useEffect(() => {
         if (id) {
           fetchVariant();
+          fetchReviews(id);
+          fetchRating(id);
+          fetchCount(id);
         }
       }, [id]);
       
@@ -79,6 +84,100 @@ function ProductDetailPage() {
         }
         addToCart(dispatch,cartItemRequest,token);
       }
+      const [activeTab, setActiveTab] = useState('review');
+      const handleTabSelect = (tab) => {
+        setActiveTab(tab);
+      };
+      const fetchReviews = async (id)=>{
+        try{
+            const response = await UserApiService.getReviews(id);
+            setReviews(response.data);
+        }catch(err)
+        {
+          console.log(err);
+        }
+      }
+      const[reviews, setReviews]= useState([{}])
+      const StarRating = ({ rating }) => {
+        // Tạo một mảng của sao dựa trên điểm rating
+        let stars = [];
+        for (let i = 0; i < 5; i++) {
+          if (i < rating) {
+            stars.push(<span key={i} className="text-warning">&#9733;</span>); // Sao đầy
+          } else {
+            stars.push(<span key={i} className="text-muted">&#9733;</span>); // Sao rỗng
+          }
+        }
+      
+        return <div>{stars}</div>;
+      };
+      const[totalRating,setTotalRating] = useState('');
+      const[count,setCount]=useState('');
+      const fetchRating = async (id)=>{
+        try{
+          const response = await UserApiService.getTotalRating(id);
+          setTotalRating(response.data);
+
+        }catch(error){
+          console.log(error);
+        }
+
+      }
+      const fetchCount = async (id)=>{
+        try{
+          const response = await UserApiService.getCount(id);
+          setCount(response.data);
+
+        }catch(error){
+          console.log(error);
+        }
+
+      }
+      const [reviewRequest,setReviewRequest] = useState({
+        product: '',
+        rating: '',
+        content: '',
+    
+      })
+      const handleRatingSelect = (selectedRating) => {
+        setReviewRequest(prevState => ({
+          ...prevState,
+          rating: selectedRating
+        }));
+      };
+    
+      const handleContentChange = (event) => {
+        setReviewRequest(prevState => ({
+          ...prevState,
+          content: event.target.value,
+          product: product
+        }));
+      };
+    
+      const [resetKey, setResetKey] = useState(0);
+      const handleSubmit = async (event) => {
+        event.preventDefault();
+        try{
+          const response = await UserApiService.postReview(reviewRequest,token);
+          console.log('request '+id);
+          console.log('request ',reviewRequest);
+          toast.success("Đánh giá thành công!", { position: "top-right" });
+          fetchReviews(id);
+          fetchRating(id);
+          fetchCount(id);
+          setResetKey(prevKey => prevKey + 1);
+          setReviewRequest({
+            ...reviewRequest,
+            rating: '',
+            content: ''
+          });
+
+        }catch(err){
+          console.log(err)
+          toast.error(err.response?.data, { position: "top-right" });
+        }
+  
+      };
   return (
     <div>
            <NavBar></NavBar>
@@ -159,11 +258,90 @@ function ProductDetailPage() {
                   
                 </ul>
             </div>
-        </div>
+          </div>
          )}
          </form>
          <ToastContainer></ToastContainer>
-    </div>
+        </div>
+        <div class="container mt-5 shadow box-review" style={{marginBottom:'50px'}}>
+        <div className="nav nav-tabs">
+            <a
+              className={`nav-link ${activeTab === 'review' ? 'active' : ''}`}
+              onClick={() => handleTabSelect('review')}
+            >
+              Đánh giá
+            </a>
+            <a
+              className={`nav-link ${activeTab === 'write-review' ? 'active' : ''}`}
+              onClick={() => handleTabSelect('write-review')}
+            >
+              Viết đánh giá
+            </a>
+          </div>
+          <div className="tab-content">
+           
+            <div
+              className={`tab-pane ${activeTab === 'review' ? 'active' : ''}`}
+              id="review"
+            >
+              
+              {reviews && reviews?.length>0 ?(
+                <div className="container mt-3 tab-review">
+                <p>Tổng đánh giá <small>({count})</small>: <StarRating rating={totalRating} /></p>
+                <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+                  {/* Đánh giá 1 */}
+                  {reviews?.map((review)=>(
+                  <div className="col-md-12" key={review.id}>
+                    <div className="card">
+                      <div className="card-body">
+                        <div className="media">
+                          <img className="align-self-start mr-3 rounded-circle" src={userimg} style={{height:'100px',width:'100px'}} alt="Avatar người dùng" />
+                          <div className="media-body">
+                            <h5 className="mt-0">{review.user?.fullName ? review.user?.fullName : review.user?.email}</h5>
+                            <StarRating rating={review.rating} />
+                            <p>{review.content}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  ))}
+                    {/* Đánh giá 2 */}       
+                  </div>
+                </div>
+                   ):(
+                    <p>Sản phẩm chưa có đánh giá nào</p>
+                  )}
+            </div>
+         
+            <div
+              className={`tab-pane ${activeTab === 'write-review' ? 'active' : ''}`}
+              id="write-review"
+            >
+                <form onSubmit={handleSubmit}>
+                <h2>Viết Đánh Giá</h2>
+                <div className="form-group">
+                  <label htmlFor="rating">Đánh giá của bạn:</label>
+                  <h2>
+
+                  <StarRatingInput  key={resetKey} onRatingSelect={handleRatingSelect} />
+                  </h2>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="reviewContent">Nội dung đánh giá:</label>
+                  <textarea
+                    className="form-control"
+                    id="reviewContent"
+                    rows="3"
+                    value={reviewRequest.content}
+                    onChange={handleContentChange}
+                  ></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary">Gửi Đánh Giá</button>
+              </form>
+            </div>
+          </div>
+        </div>
    
         <div className='footer'>
       <Footer></Footer>
