@@ -121,6 +121,34 @@ function UserPage() {
         return discount;
     }
     const discount = discountRank({ userData });
+    const handleUpdateState = async (id)=>{
+      try{
+  
+        const response = await UserApiService.updateOrder(token,id);
+        const updatedOrderState = response.data.state;
+
+        // Cập nhật trạng thái mới vào danh sách hiện tại
+        const updatedOrders = orders.map((order) => {
+          if (order.id === id) {
+            const updatedOrderStates = order.orderStates.map((orderState, index) => {
+              if (index === 0) {
+                return { ...orderState, state: updatedOrderState };
+              }
+              return orderState;
+            });
+    
+            return { ...order, orderStates: updatedOrderStates };
+          }
+          return order;
+        });
+    
+        // Cập nhật danh sách hiện tại và hiển thị thông báo thành công
+        setOrders(updatedOrders);
+        toast.success("Cập nhật trạng thái thành công", { position: "top-right" });
+      }catch(err){
+        console.log(err);
+      }
+    }
   return (
     <div>
         <NavBar></NavBar>
@@ -186,27 +214,27 @@ function UserPage() {
                                     </tr>
                                 </thead>
                                 <tbody className="text-center">
-                                    {currentProducts.map((order, index) => (
+                                    {Array.isArray(currentProducts) && currentProducts?.map((order, index) => (
                                     <tr key={order.id}>
                                         <th scope="row">{index + 1}</th>
                                         <td>{order.code}</td>
                                         <td>
-                                        {Array.isArray(order.orderState) ?
-                                        order.orderState.map((state) => (
+                                        {Array.isArray(order.orderStates) ?
+                                        order.orderStates.map((state) => (
                                             // <span key={state.id}>{state.state}</span>
                                             <span key={state.id}>
                                             {state.state === 'Đang giao' && (
-                                              <button type='button' className="btn btn-primary">Đang giao</button>
+                                              <button type='button' className="btn btn-primary" onClick={()=>handleUpdateState(order.id)} >Đang giao</button>
                                             )}
                                             {state.state === 'Chờ xác nhận' && (
-                                              <button type='button' className="btn btn-warning" onClick={()=>(order.id)} >Chờ xác nhận</button>
+                                              <button type='button' className="btn btn-warning" >Chờ xác nhận</button>
                                             )}
                                              {state.state === 'Hoàn thành' && (
                                               <button type='button' className="btn btn-success">Đã hoàn thành</button>
                                             )}
                                           </span>
-                                        )):(
-                                            <button type='button' className="btn btn-primary">Đang giao</button>
+                                        )):(  
+                                            <button type='button' className="btn btn-primary">Lỗi !!</button>
                                         )}
                                         </td>
                                         <td>{order.paymentMethod}</td>

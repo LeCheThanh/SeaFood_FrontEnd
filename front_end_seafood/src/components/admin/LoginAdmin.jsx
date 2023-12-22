@@ -1,40 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminApiService from '../../service/AdminApiService';
 import { toast, ToastContainer } from "react-toastify";
 import axios from 'axios';
 import { Form, Button } from 'react-bootstrap';
  import './login.css';
 import { useNavigate } from 'react-router-dom';
+import { loginAdmin } from '../../redux/apiRequest';
+import { useDispatch, useSelector } from 'react-redux';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const admin = useSelector((state)=>state.authAdmin.loginAdmin?.currentUser);
+  const dispatch = useDispatch();
 
+  useEffect(()=>{
+    if(admin){
+      navigate("/admin");
+    }
+  })
+  const handleLogin =  (e) => {
+    e.preventDefault();
     try {
-      const response = await AdminApiService.loginAdmin({
+      const data = {
         email: email,
         password: password
-      });
-
-      // Lưu token vào header
-      if (response && response.data && response.data?.token) {
-        const token = response.data?.token;
-        localStorage.setItem('token', token);
-        // axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // Kiểm tra phản hồi từ server và thực hiện các hành động tương ứng
-      toast.success("Đăng nhập thành công", { position: "top-right" });
-      setTimeout(()=>{
-        navigate('/admin',2000)
-      })
-    } else {
-        throw new Error('Phản hồi không hợp lệ');
-      }
-      // Ví dụ: chuyển hướng đến trang quản trị
-
+    }
+      const response = loginAdmin(data,dispatch,navigate);
     } catch (error) {
       toast.error(error.response.data?.message, { position: "top-right" });
     }

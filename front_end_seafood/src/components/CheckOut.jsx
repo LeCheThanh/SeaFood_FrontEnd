@@ -104,7 +104,8 @@ function CheckOut() {
             }
             // Xử lý phản hồi sau khi gửi đơn hàng
             else{setTimeout(()=>{
-                navigate('/order/success',3000);
+                toast.success('Đặt hàng thành công!', { position: "top-right" });
+                navigate('/order/success',2000);
             })
         }
         } catch (err) {

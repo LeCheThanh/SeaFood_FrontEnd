@@ -5,6 +5,7 @@ import AdminApiService from '../../service/AdminApiService';
 import Sidebar from './Sidebar'
 import Nav from './Nav'
 import { formatCurrency } from '../../utils/formatCurrency';
+import EventCreationForm from '../EventForm';
 function Dashboard() {
     const [toggle, setToggle] = useState(true);
     const Toggle = ()=>{
@@ -182,6 +183,7 @@ function Dashboard() {
                         ) : (
                         <p>Loading.....</p>
                         )}
+                        <EventCreationForm></EventCreationForm>
                 </div>
             </div>
         </div>
