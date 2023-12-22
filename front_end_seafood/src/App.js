@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,Navigate  } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import Register from './components/RegisterUser';
@@ -24,42 +24,59 @@ import UserPage from './components/UserPage';
 import CheckOut from './components/CheckOut';
 import OrderSuccess from './components/OrderSuccess';
 import NotFound from './components/NotFound';
-function App() {
+import PaymentResult from './components/PaymentResult';
+import { useSelector } from 'react-redux';
+import withAdminAuth from './path/withAdminAuth ';
+function App() { 
+  const AdminDashboard = withAdminAuth(Dashboard);
+  const AdminProduct = withAdminAuth(Product);
+  const AdminCreateProduct = withAdminAuth(CreateProduct);
+  const AdminProductDetail = withAdminAuth(ProductDetail);
+  const AdminCategories = withAdminAuth(Categories);
+  const AdminCreateCategory = withAdminAuth(CreateCategory);
+  const AdminOrder = withAdminAuth(Orders);
+  const AdminUser = withAdminAuth(Users);
+  const AdminCreateUser = withAdminAuth(CreateUser);
+  const AdminRevenuer = withAdminAuth(Revenue);
   return (
-  <div>
-      <Router>
-            <div>
-              <Routes>
-                   <Route path="/" exact Component={Home}></Route>
-                   <Route path="/login" exact Component={Login}></Route>
-                   <Route path="/products" exact Component={ProductPage}></Route>
-                   <Route path="/cart" exact Component={CartPage}></Route>
-                   <Route path="/product/:slug" exact Component={ProductDetailPage}></Route>
-                   <Route path="/user/info" exact Component={UserPage}></Route>
-                   <Route path="/checkout" exact Component={CheckOut}></Route>
-                   <Route path="/order/success" exact Component={OrderSuccess}></Route>
+    <div>
+        <Router>
+              <div>
+                <Routes>
+                    <Route path="/" exact Component={Home}></Route>
+                    <Route path='/register'exact Component={Register}></Route>
+                    <Route path="/login" exact Component={Login}></Route>
+                    <Route path="/products" exact Component={ProductPage}></Route>
+                    <Route path="/cart" exact Component={CartPage}></Route>
+                    <Route path="/product/:slug" exact Component={ProductDetailPage}></Route>
+                    <Route path="/user/info" exact Component={UserPage}></Route>
+                    <Route path="/checkout" exact Component={CheckOut}></Route>
+                    <Route path="/order/success" exact Component={OrderSuccess}></Route>
+                    <Route path="/payment-result" exact Component={PaymentResult}  ></Route>
+                    
 
-                  <Route path="/admin" exact Component={Dashboard}></Route>
-                  <Route path='/admin/dashboard'exact Component={Dashboard}></Route>
-                  <Route path='/admin/products'exact Component={Product}></Route>
-                  <Route path='/admin/product/add-product'exact Component={CreateProduct}></Route>
-                  <Route path='/admin/product/product-detail/:id'exact Component={ProductDetail}></Route>
-                  <Route path='/admin/categories'exact Component={Categories}></Route>
-                  <Route path='/admin/category/add-category'exact Component={CreateCategory}></Route>
-                  <Route path='/admin/orders'exact Component={Orders}></Route>
-                  <Route path='/admin/users'exact Component={Users}></Route>
-                  <Route path='/admin/user/create'exact Component={CreateUser}></Route>
-                  <Route path='/admin/login'exact Component={AdminLogin}></Route>
-                  <Route path='/admin/revenue'exact Component={Revenue}></Route>
-                  <Route path='/register'exact Component={Register}></Route>
+      
+                    <Route path='/admin/login'exact Component={AdminLogin}></Route>
+                    <Route path="/admin" exact Component={AdminDashboard}></Route>
+                    <Route path='/admin/dashboard'exact Component={AdminDashboard}></Route>
+                    <Route path='/admin/products'exact Component={AdminProduct}></Route>
+                    <Route path='/admin/product/add-product'exact Component={AdminCreateProduct}></Route>
+                    <Route path='/admin/product/product-detail/:id'exact Component={AdminProductDetail}></Route>
+                    <Route path='/admin/categories'exact Component={AdminCategories}></Route>
+                    <Route path='/admin/category/add-category'exact Component={AdminCreateCategory}></Route>
+                    <Route path='/admin/orders'exact Component={AdminOrder}></Route>
+                    <Route path='/admin/users'exact Component={AdminUser}></Route>
+                    <Route path='/admin/user/create'exact Component={AdminCreateUser}></Route>
+                    <Route path='/admin/revenue'exact Component={AdminRevenuer}></Route>
+                    
 
 
-                  <Route path="*" element={<NotFound />} />
-              </Routes>
-            </div>
-    </Router>
-    </div>
-  );
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+              </div>
+      </Router>
+      </div>
+    );
 }
 
 export default App;
