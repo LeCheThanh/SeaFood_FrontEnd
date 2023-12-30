@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import './styles.css'
@@ -13,12 +13,100 @@ import SwiperPage from './SwiperPage';
 import UserApiService from '../service/UserApiService';
 import { useSelector } from 'react-redux';
 import { toast, ToastContainer } from "react-toastify";
+import axios from 'axios';
+import ProductDiscount from './ProductDiscount';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css'; // Ensure Swiper's CSS is imported
 
 function Home() {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    // Fetch the products from the API and set the products state
+    const fetch = async ()=>{
+      try{
+        const response = await axios.get('http://localhost:8080/api/events/active');
+        setEvents(response.data);
+        console.log(response.data)
+      }catch(err){
+        console.log(err);
+      }
+    }
+    fetch();
+    // Set up an interval to update the time left every second
+    // const intervalId = setInterval(() => {
+    //   setEvents(currentEvents => currentEvents.map(event => ({
+    //     ...event,
+    //     timeLeft: calculateTimeLeft(event.endTime),
+    //   })));
+    // }, 1000);
+
+    // // Clear the interval when the component is unmounted
+    // return () => clearInterval(intervalId);
+  }, []);
  
+  // const [timeLeft, setTimeLeft] = useState('');
+
+  // function calculateTimeLeft(endTime) {
+  //   const difference = +new Date(endTime) - +new Date();
+  //   // Initialize with default object structure
+  //   let timeLeft = {
+  //     days: 0,
+  //     hours: 0,
+  //     minutes: 0,
+  //     seconds: 0,
+  //   };
+  
+  //   if (difference > 0) {
+  //     timeLeft = {
+  //       days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+  //       hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+  //       minutes: Math.floor((difference / 1000 / 60) % 60),
+  //       seconds: Math.floor((difference / 1000) % 60),
+  //     };
+  //   }
+  
+  //   return timeLeft;
+  // }
+
+  // // Renders the time left as a string
+  // const renderTimeLeft = (timeLeft) => {
+  //   // Ensure timeLeft is an object and has keys before mapping
+  //   if (timeLeft && typeof timeLeft === 'object' && Object.keys(timeLeft).length) {
+  //     return Object.keys(timeLeft).map(interval => {
+  //       if (!timeLeft[interval]) return '';
+  //       return `${timeLeft[interval]} ${interval} `;
+  //     }).join('');
+  //   }
+  //   return 'Event ended or time data unavailable'; // Or any other fallback message
+  // };
+
   return (
     <div>
      <Header></Header>
+     {events.map((event) => (
+            <div key={event.id} className='container shadow'>
+              <div className='justify-content-center' style={{display:'flex', margin: '20px'}}>
+                 <h2 className='title-home'>{event.name} - Discounts!</h2>
+                 {/* <h2 className='title-home'>{renderTimeLeft(event.timeLeft)}</h2> */}
+            </div>
+            <Swiper
+              spaceBetween={50} // Adjust the space between slides
+              slidesPerView={4} // Adjust the number of slides per view
+              // ... other swiper settings you might want to use
+            >
+              {event.productVariants.map((variant) => (
+                <SwiperSlide key={variant.id}>
+                  <ProductDiscount
+                    productVariant={variant}
+                    discountRate={event.discountRate}
+                    endTime={event.endTime} // Passed endTime from event
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        ))}
      <div className='container' style={{marginBottom:'5rem'}}>
       <div className='justify-content-center' style={{display:'flex', margin: '20px'}}>
         <h2 className='title-home'>CHÍNH SÁCH</h2>
