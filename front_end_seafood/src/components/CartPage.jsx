@@ -51,10 +51,12 @@ function CartPage() {
         try {
           console.log(updateRequest);
           const response = await UserApiService.updateCart(token,updateRequest);
+          toast.success('cập nhật thành công!', { position: "top-right" });
           fetchCart();
           fetchTotal();
         } catch (error) {
           console.error(error);
+          toast.error(error.response.data, { position: "top-right" });
         }
       };
       const handleQuantityChange = (cartItemId, quantity) => {
@@ -110,7 +112,7 @@ function CartPage() {
                 {cartItems && cartItems?.map((cart, index) => (
                     <div class="card mb-3" key={cart.id}>
                         <div class="row no-gutters ">
-                          <Link to={`/product/${cart.product.slug}`}>
+                          <Link to={`/product/${cart?.product?.slug}`}>
                             <div class="col-md-4 position-relative">
                             <img src={cart.productVariant.image} class="card-img-top" alt="Abalone" style={{width:'110px',height:'110px'}}/>
                             </div>
@@ -119,8 +121,8 @@ function CartPage() {
                             <div class="card-body ">
                                 <div class="row">
                                 <div class="col-8">
-                                    <h5 class="card-title">{cart.productVariant.name}</h5>
-                                    <p>/{cart.product.name}</p>
+                                    <h5 class="card-title">{cart?.productVariant?.name}</h5>
+                                    <p>/{cart?.productVariant?.product?.name}</p>
                                     <p class="card-text">giá: {formatCurrency(cart.productVariant.price,'VND')}</p>
                                     <p class="card-text">giá sỉ: {formatCurrency(cart.productVariant.whosalePrice,'VND')}</p>
                                 </div>

@@ -103,10 +103,9 @@ function CheckOut() {
                 window.location.href = response.data;
             }
             // Xử lý phản hồi sau khi gửi đơn hàng
-            else{setTimeout(()=>{
-                toast.success('Đặt hàng thành công!', { position: "top-right" });
-                navigate('/order/success',2000);
-            })
+            if(paymentMethod=='cash'){
+               window.location.href = response.data;
+               
         }
         } catch (err) {
             toast.error(err.response.data, { position: "top-right" });
@@ -216,7 +215,7 @@ function CheckOut() {
                                         <div className="d-flex align-items-center">
                                             <img src={cartItem.productVariant.image} alt={cartItem.productVariant.name} style={{ width: '100px', height: '100px', marginRight: '10px' }}/>
                                             <div>
-                                                <h6 className="my-0">{cartItem.productVariant.name}</h6>
+                                                <h6 className="my-0">{cartItem.productVariant.name}/{cartItem.productVariant.product.name}</h6>
                                                 <small className="text-body-secondary">{cartItem.productVariant.description}</small>
                                             </div>
                                         </div>
