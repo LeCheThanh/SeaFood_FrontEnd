@@ -211,6 +211,8 @@ function ProductDetailPage() {
                 <div>
                      <p class="lead">Giá: {formatCurrency(selectedVariant.price,'VND')}</p>
                      <p>Giá sỉ: {formatCurrency(selectedVariant.whosalePrice,'VND')}</p>
+                     <p className='text-danger'>đã bán: {selectedVariant.soldQuantity}</p>
+                     <p className='text-primary'>còn lại: {selectedVariant.stock}</p>
                 </div>
                 ):(<></>) }
                 <input
